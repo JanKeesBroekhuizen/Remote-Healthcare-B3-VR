@@ -227,25 +227,43 @@ namespace Remote_Healthcare_VR
     {
         public static string Add(float[] size, float[] heights)
         {
-            JObject add = new JObject(new JProperty("id", "scene/terrain/add"), new JProperty("data", new JObject(new JProperty("size", size), new JProperty("heights", heights))));
+            JObject add = 
+                new JObject(
+                    new JProperty("id", "scene/terrain/add"), 
+                    new JProperty("data", 
+                    new JObject(
+                        new JProperty("size", size), 
+                        new JProperty("heights", heights))));
             return add.ToString();
         }
 
         public static string Update()
         {
-            JObject update = new JObject(new JProperty("id", "scene/terrain/update"), new JProperty("data"));
+            JObject update = 
+                new JObject(
+                    new JProperty("id", "scene/terrain/update"), 
+                    new JProperty("data"));
             return update.ToString();
         }
 
-        public static string Delete()
+        public static string Delete() 
         {
-            JObject delete = new JObject(new JProperty("id", "scene/terrain/delete"), new JProperty("data"));
+            JObject delete = 
+                new JObject(
+                    new JProperty("id", "scene/terrain/delete"), 
+                    new JProperty("data"));
             return delete.ToString();
         }
 
-        public static string GetHeight(float[] position, float[] positions)
+        public static string GetHeight(float[] position, float[] positions) //Volgens mij is dit niet correct!
         {
-            JObject getheight = new JObject(new JProperty("id", "scene/terrain/getheight"), new JProperty("data", new JObject(new JProperty("position", position), new JProperty("positions", positions))));
+            JObject getheight = 
+                new JObject(
+                    new JProperty("id", "scene/terrain/getheight"), 
+                    new JProperty("data", 
+                    new JObject(
+                        new JProperty("position", position), 
+                        new JProperty("positions", positions))));
             return getheight.ToString();
         }
 
@@ -253,7 +271,78 @@ namespace Remote_Healthcare_VR
 
     class Panel
     {
+        public static string Clear(string id)
+        {
+            JObject clear = new JObject(
+                new JProperty("id", "scene/panel/clear"),
+                new JProperty("data", 
+                new JObject(
+                    new JProperty("id", id))));
 
+            return clear.ToString();
+        }
+
+        public static string DrawLines(string id, int width) //Deze werkt nog niet!!!!
+        {
+            JObject image = new JObject(
+                new JProperty("id", "scene/panel/drawlines"),
+                new JProperty("data",
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("width", width),
+                    new JProperty("position", ""))));
+            return "";
+        }
+
+        public static string DrawText(string id, string text, float[] position, float size, int[] color, string font)
+        {
+            JObject drawText = new JObject(
+                new JProperty("id", "scene/panel/drawtext"),
+                new JProperty("data",
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("text", text),
+                    new JProperty("position", position),
+                    new JProperty("size", size),
+                    new JProperty("color", color),
+                    new JProperty("font", font))));
+            return drawText.ToString();
+        }
+
+        public static string Image(string id, string imagePath, float[] position, float[] size)
+        {
+            JObject image = new JObject(
+                new JProperty("id", "scene/panel/image"),
+                new JProperty("data",
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("image", imagePath),
+                    new JProperty("position", position),
+                    new JProperty("size", size))));
+            return image.ToString();
+        }
+
+        public static string SetClearColor(string id, int[] color)
+        {
+            JObject setClearColor = new JObject(
+                new JProperty("id", "scene/panel/setclearcolor"),
+                new JProperty("data",
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("color", color))));
+            return setClearColor.ToString();
+        }
+
+        public static string Swap(string id)
+        {
+            JObject swap = new JObject(
+                new JProperty("id", "scene/panel/swap"),
+                new JProperty("data",
+                new JObject(
+                    new JProperty("id", id))));
+
+            return swap.ToString();
+        }
     }
 
     class Skybox
