@@ -13,19 +13,16 @@ namespace SimpleTCPClient
         static void Main(string[] args)
         {
             TcpClient client = new TcpClient("145.48.6.10", 6666);
-            /*
+            WriteID(client);
+            
             bool done = false;
-            Console.WriteLine("Type 'bye' to end connection");
+            
+            
             while (!done)
             {
-                Console.Write("Enter a message to send to server: ");
-                string message = Console.ReadLine();
-
-                WriteTextMessage(client, message);
-
                 string response = ReadTextMessage(client);
                 Console.WriteLine("Response: " + response);
-                done = response.Equals("BYE");
+               
             }
             */
             WriteID(client);
