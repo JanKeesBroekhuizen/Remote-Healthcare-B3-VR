@@ -45,11 +45,35 @@ namespace Remote_Healthcare_VR
     }
     class Node
     {
+        
 
     } 
 
     class Terrain
     {
+        public static string Add(float[] size, float[] heights)
+        {
+            JObject add = new JObject(new JProperty("id", "scene/terrain/add"), new JProperty("data", new JObject(new JProperty("size", size), new JProperty("heights", heights))));
+            return add.ToString();
+        }
+
+        public static string Update()
+        {
+            JObject update = new JObject(new JProperty("id", "scene/terrain/update"), new JProperty("data"));
+            return update.ToString();
+        }
+
+        public static string Delete()
+        {
+            JObject delete = new JObject(new JProperty("id", "scene/terrain/delete"), new JProperty("data"));
+            return delete.ToString();
+        }
+
+        public static string GetHeight(float[] position, float[] positions)
+        {
+            JObject getheight = new JObject(new JProperty("id", "scene/terrain/getheight"), new JProperty("data", new JObject(new JProperty("position", position), new JProperty("positions", positions))));
+            return getheight.ToString();
+        }
 
     }
 
@@ -60,6 +84,11 @@ namespace Remote_Healthcare_VR
 
     class Skybox
     {
+        public static string SetTime(string time)
+        {
+            JObject settime = new JObject(new JProperty("id", "scene/skybox/settime"), new JProperty("data", new JObject(new JProperty("time", time))));
+            return settime.ToString();
+        }
 
     }
 
