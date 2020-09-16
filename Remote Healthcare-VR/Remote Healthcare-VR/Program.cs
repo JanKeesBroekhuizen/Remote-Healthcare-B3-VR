@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Remote_Healthcare_VR;
 using System;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace SimpleTCPClient
             TcpClient client = new TcpClient("145.48.6.10", 6666);
 
             String tunnelId = Init(client);
+            Scene.Get();
+            
         }
 
         static string Init(TcpClient client)
