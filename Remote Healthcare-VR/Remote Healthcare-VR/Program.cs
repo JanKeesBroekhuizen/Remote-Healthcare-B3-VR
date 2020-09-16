@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Remote_Healthcare_VR;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -28,21 +29,24 @@ namespace SimpleTCPClient
             }
             */
             WriteID(client);
-
+            ReadTextMessage(client);
         }
 
         public static void WriteTextMessage(TcpClient client, string message)
         {
-            var stream = new StreamWriter(client.GetStream(), Encoding.ASCII);
+            var stream = client.GetStream();
             {
+                Console.WriteLine("WriteTextMessage()");
                 int messageLength = message.Length;
                 byte[] dataLength = BitConverter.GetBytes(messageLength);
                 byte[] messageData = Encoding.ASCII.GetBytes(message);
                 byte[] data = dataLength.Concat(messageData).ToArray();
+                
                 foreach(byte info in data)
                 {
                     Console.WriteLine(info);
                 }
+                
                 stream.Write(data);
                 stream.Flush();
             }
@@ -50,17 +54,44 @@ namespace SimpleTCPClient
 
         public static string ReadTextMessage(TcpClient client)
         {
-            var stream = new StreamReader(client.GetStream(), Encoding.ASCII);
+            
+            var stream = client.GetStream();
             {
-                return stream.ReadLine();
+                Console.WriteLine("ReadTextMessage()");
+                byte[] messageLength = new byte[4];
+                int length = stream.Read(messageLength, 0, 4);
+                foreach (byte b in messageLength)
+                {
+                    Console.WriteLine(b + " ");
+                }
+                messageLength.Reverse();
+                int messageLenghtInt = BitConverter.ToInt32(messageLength);
+                Console.WriteLine("Length: " + messageLenghtInt);
+
+                byte[] message = new byte[messageLenghtInt];
+                int totalRead = 0;
+
+                do
+                {
+                    int test = stream.Read(message, totalRead, messageLenghtInt - totalRead);
+                    totalRead += test;
+                } while (totalRead < messageLenghtInt);
+                
+                //Console.WriteLine("Length array: " + test);
+
+                Console.WriteLine(Encoding.ASCII.GetString(message));
+
+                return " ";
             }
         }
 
         public static void WriteID(TcpClient client)
         {
-            string id = "session/list";
-            string Jsonstring = JsonSerializer.Serialize(id);
-            WriteTextMessage(client, id);
+            ID id = new ID("session/list");
+            string idToJson = id.ToJSON();
+            Console.WriteLine(idToJson);
+            
+            WriteTextMessage(client, idToJson);
         }
     }
 }
