@@ -1,4 +1,4 @@
-﻿using Remote_Healthcare_VR;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,20 +13,25 @@ namespace SimpleTCPClient
         static void Main(string[] args)
         {
             TcpClient client = new TcpClient("145.48.6.10", 6666);
-            WriteID(client);
-            
-            bool done = false;
-            
-            
-            while (!done)
-            {
-                string response = ReadTextMessage(client);
-                Console.WriteLine("Response: " + response);
-               
-            }
-            */
-            WriteID(client);
-            ReadTextMessage(client);
+
+            String tunnelId = Init(client);
+        }
+
+        static string Init(TcpClient client)
+        {
+            WriteTextMessage(client, "{\"id\":\"session/list\"}");
+
+            JObject response = ReadTextMessage(client); // stap 2 (get response)
+
+            var sessionId = response["data"][0]["id"];
+            //Console.WriteLine(sessionId); // stap 3 (getting id)
+
+            WriteTextMessage(client, "{\"id\":\"tunnel/create\",\"data\":{\"session\":\"" + sessionId + "\"}}");
+
+            response = ReadTextMessage(client); // stap 4 (get response)
+            var tunnelId = response["data"]["id"];
+            //Console.WriteLine(tunnelId);
+            return (string)tunnelId;
         }
 
         public static void WriteTextMessage(TcpClient client, string message)
@@ -38,29 +43,29 @@ namespace SimpleTCPClient
                 byte[] dataLength = BitConverter.GetBytes(messageLength);
                 byte[] messageData = Encoding.ASCII.GetBytes(message);
                 byte[] data = dataLength.Concat(messageData).ToArray();
-                
-                foreach(byte info in data)
-                {
-                    Console.WriteLine(info);
-                }
-                
+
+                //foreach(byte info in data)
+                //{
+                //    Console.WriteLine(info);
+                //}
+
                 stream.Write(data);
                 stream.Flush();
             }
         }
 
-        public static string ReadTextMessage(TcpClient client)
+        public static JObject ReadTextMessage(TcpClient client)
         {
-            
+
             var stream = client.GetStream();
             {
                 Console.WriteLine("ReadTextMessage()");
                 byte[] messageLength = new byte[4];
                 int length = stream.Read(messageLength, 0, 4);
-                foreach (byte b in messageLength)
-                {
-                    Console.WriteLine(b + " ");
-                }
+                //foreach (byte b in messageLength)
+                //{
+                //    Console.WriteLine(b + " ");
+                //}
                 messageLength.Reverse();
                 int messageLenghtInt = BitConverter.ToInt32(messageLength);
                 Console.WriteLine("Length: " + messageLenghtInt);
@@ -73,22 +78,15 @@ namespace SimpleTCPClient
                     int test = stream.Read(message, totalRead, messageLenghtInt - totalRead);
                     totalRead += test;
                 } while (totalRead < messageLenghtInt);
-                
+
                 //Console.WriteLine("Length array: " + test);
 
-                Console.WriteLine(Encoding.ASCII.GetString(message));
+                //Console.WriteLine(Encoding.ASCII.GetString(message));
 
-                return " ";
+                JObject messageJson = JObject.Parse(Encoding.UTF8.GetString(message));
+                Console.WriteLine(messageJson);
+                return messageJson;
             }
-        }
-
-        public static void WriteID(TcpClient client)
-        {
-            ID id = new ID("session/list");
-            string idToJson = id.ToJSON();
-            Console.WriteLine(idToJson);
-            
-            WriteTextMessage(client, idToJson);
         }
     }
 }
