@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Remote_Healthcare_VR
@@ -37,7 +38,7 @@ namespace Remote_Healthcare_VR
                     new JProperty("data", 
                     new JObject(
                         new JProperty("filename", fileName), 
-                        new JProperty("overwrite"))));
+                        new JProperty("overwrite", overwrite))));
             return save.ToString();
         }
 
@@ -67,7 +68,7 @@ namespace Remote_Healthcare_VR
     }
     class Node
     {
-        public static string Add(string name, string guid, 
+        public string Add(string name, string guid, 
             int[] position, float scale, int[] rotation,
             string filename, bool cullbackfaces, bool animated, string animationname,
             bool smoothnormals, int[] panelSize, int[] panelResolution, int[] background, bool castshadow,
@@ -109,7 +110,7 @@ namespace Remote_Healthcare_VR
             return add.ToString();
         }
 
-        public static string Update(string id, string parent, int[] position, float scale, int[] rotation, string name, float speed)
+        public string Update(string id, string parent, int[] position, float scale, int[] rotation, string name, float speed)
         {
             JObject update =
                 new JObject(
@@ -130,7 +131,7 @@ namespace Remote_Healthcare_VR
             return update.ToString();
         }
 
-        public static string MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, int time)
+        public string MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, int time)
         {
             JObject moveto =
                 new JObject(
@@ -146,7 +147,7 @@ namespace Remote_Healthcare_VR
             return moveto.ToString();
         }
 
-        public static string MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, float speed)
+        public string MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, float speed)
         {
             JObject moveto =
                 new JObject(
@@ -162,7 +163,7 @@ namespace Remote_Healthcare_VR
             return moveto.ToString();
         }
 
-        public static string MoveTo(string id, string stop)
+        public string MoveTo(string id, string stop)
         {
             JObject moveto =
                 new JObject(
@@ -174,7 +175,7 @@ namespace Remote_Healthcare_VR
             return moveto.ToString();
         }
 
-        public static string Delete(string id)
+        public string Delete(string id)
         {
             JObject delete =
                 new JObject(
@@ -185,7 +186,7 @@ namespace Remote_Healthcare_VR
             return delete.ToString();
         }
 
-        public static string Find(string name)
+        public string Find(string name)
         {
             JObject find =
                 new JObject(
@@ -196,7 +197,7 @@ namespace Remote_Healthcare_VR
             return find.ToString();
         }
 
-        public static string AddLayer(string id, string diffuse, string normal, int minHeight, int maxHeight, float fadeDist)
+        public string AddLayer(string id, string diffuse, string normal, int minHeight, int maxHeight, float fadeDist)
         {
             JObject addLayer =
                 new JObject(
@@ -212,7 +213,7 @@ namespace Remote_Healthcare_VR
             return addLayer.ToString();
         }
 
-        public static string DelLayer(string name)
+        public string DelLayer()
         {
             JObject delLayer =
                 new JObject(
@@ -225,7 +226,7 @@ namespace Remote_Healthcare_VR
 
     class Terrain
     {
-        public static string Add(float[] size, float[] heights)
+        public string Add(float[] size, float[] heights)
         {
             JObject add = 
                 new JObject(
@@ -237,7 +238,7 @@ namespace Remote_Healthcare_VR
             return add.ToString();
         }
 
-        public static string Update()
+        public string Update()
         {
             JObject update = 
                 new JObject(
@@ -246,7 +247,7 @@ namespace Remote_Healthcare_VR
             return update.ToString();
         }
 
-        public static string Delete() 
+        public string Delete() 
         {
             JObject delete = 
                 new JObject(
@@ -255,7 +256,7 @@ namespace Remote_Healthcare_VR
             return delete.ToString();
         }
 
-        public static string GetHeight(float[] position, float[] positions) //Volgens mij is dit niet correct!
+        public string GetHeight(float[] position, float[] positions) //Volgens mij is dit niet correct!
         {
             JObject getheight = 
                 new JObject(
@@ -271,7 +272,7 @@ namespace Remote_Healthcare_VR
 
     class Panel
     {
-        public static string Clear(string id)
+        public string Clear(string id)
         {
             JObject clear = new JObject(
                 new JProperty("id", "scene/panel/clear"),
@@ -282,7 +283,7 @@ namespace Remote_Healthcare_VR
             return clear.ToString();
         }
 
-        public static string DrawLines(string id, int width) //Deze werkt nog niet!!!!
+        public string DrawLines(string id, int width) //Deze werkt nog niet!!!!
         {
             JObject image = new JObject(
                 new JProperty("id", "scene/panel/drawlines"),
@@ -294,7 +295,7 @@ namespace Remote_Healthcare_VR
             return "";
         }
 
-        public static string DrawText(string id, string text, float[] position, float size, int[] color, string font)
+        public string DrawText(string id, string text, float[] position, float size, int[] color, string font)
         {
             JObject drawText = new JObject(
                 new JProperty("id", "scene/panel/drawtext"),
@@ -309,7 +310,7 @@ namespace Remote_Healthcare_VR
             return drawText.ToString();
         }
 
-        public static string Image(string id, string imagePath, float[] position, float[] size)
+        public string Image(string id, string imagePath, float[] position, float[] size)
         {
             JObject image = new JObject(
                 new JProperty("id", "scene/panel/image"),
@@ -322,7 +323,7 @@ namespace Remote_Healthcare_VR
             return image.ToString();
         }
 
-        public static string SetClearColor(string id, int[] color)
+        public string SetClearColor(string id, int[] color)
         {
             JObject setClearColor = new JObject(
                 new JProperty("id", "scene/panel/setclearcolor"),
@@ -333,21 +334,20 @@ namespace Remote_Healthcare_VR
             return setClearColor.ToString();
         }
 
-        public static string Swap(string id)
+        public string Swap(string id, List<int[]> lines)
         {
             JObject swap = new JObject(
                 new JProperty("id", "scene/panel/swap"),
                 new JProperty("data",
                 new JObject(
                     new JProperty("id", id))));
-
             return swap.ToString();
         }
     }
 
     class Skybox
     {
-        public static string SetTime(string time)
+        public string SetTime(float time)
         {
             JObject settime = new JObject(
                 new JProperty("id", "scene/skybox/settime"), 
@@ -381,7 +381,7 @@ namespace Remote_Healthcare_VR
     {
 
         //scene/road/add
-        public static string AddRoad(string routeuuid)
+        public string AddRoad(string routeuuid)
         {
             JObject AddRoad = new JObject(
                 new JProperty("id", "scene/road/add"), 
@@ -396,7 +396,7 @@ namespace Remote_Healthcare_VR
         }
 
         //scene/road/update
-        public static string UpdateRoad(string roaduuid, string routeuuid)
+        public string UpdateRoad(string roaduuid, string routeuuid)
         {
             JObject AddRoad = new JObject(
                 new JProperty("id", "scene/road/update"),

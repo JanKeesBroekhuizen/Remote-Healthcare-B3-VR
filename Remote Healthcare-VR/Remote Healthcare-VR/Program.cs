@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Remote_Healthcare_VR;
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -13,9 +14,21 @@ namespace SimpleTCPClient
     {
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient("145.48.6.10", 6666);
+            //TcpClient client = new TcpClient("145.48.6.10", 6666);
+            //String tunnelId = Init(client);
 
-            String tunnelId = Init(client);
+            Console.WriteLine(Scene.Load("test.txt"));
+
+            
+            float[] heights = new float[255360];
+            for (int i = 0; i < 65536; i++)
+            {
+                heights[i] = 0;
+            }
+            string flatTerain = Scene.Terrain.Add(new float[]{ 256, 256}, heights);
+            string dellayer = Scene.Node.DelLayer();
+            string setTime = Scene.Skybox.SetTime(7.0f);
+
         }
 
         static string Init(TcpClient client)
