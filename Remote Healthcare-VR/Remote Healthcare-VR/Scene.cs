@@ -358,6 +358,36 @@ namespace Remote_Healthcare_VR
     class Road
     {
 
+        //scene/road/add
+        public static string AddRoad(string routeuuid)
+        {
+            JObject AddRoad = new JObject(
+                new JProperty("id", "scene/road/add"), 
+                new JProperty("data", 
+                new JObject(new JProperty("route", routeuuid), 
+                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                new JObject(new JProperty("heightoffset", 0.01)
+              )))))));
+            return AddRoad.ToString();
+        }
+
+        //scene/road/update
+        public static string UpdateRoad(string roaduuid, string routeuuid)
+        {
+            JObject AddRoad = new JObject(
+                new JProperty("id", "scene/road/update"),
+                new JProperty("data",
+                new JObject(new JProperty("id", roaduuid),
+                new JObject(new JProperty("route", routeuuid),
+                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                new JObject(new JProperty("heightoffset", 0.01)
+              ))))))));
+            return AddRoad.ToString();
+        }
     }
 }
 
