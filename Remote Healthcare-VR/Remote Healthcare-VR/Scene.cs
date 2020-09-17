@@ -15,23 +15,23 @@ namespace Remote_Healthcare_VR
         public static Skybox Skybox = new Skybox();
         public static Road Road = new Road();
 
-        public static string Get()
+        public static JObject Get()
         {
             JObject get = 
                 new JObject(
                     new JProperty("id", "scene/get"));
-            return get.ToString();
+            return get;
         }
 
-        public static string Reset()
+        public static JObject Reset()
         {
             JObject reset = 
                 new JObject(
                     new JProperty("id", "scene/reset"));
-            return reset.ToString();
+            return reset;
         }
 
-        public static string Save(string fileName, bool overwrite)
+        public static JObject Save(string fileName, bool overwrite)
         {
             JObject save = 
                 new JObject(
@@ -40,10 +40,10 @@ namespace Remote_Healthcare_VR
                     new JObject(
                         new JProperty("filename", fileName), 
                         new JProperty("overwrite", overwrite))));
-            return save.ToString();
+            return save;
         }
 
-        public static string Load(string fileName)
+        public static JObject Load(string fileName)
         {
             JObject load = 
                 new JObject(
@@ -51,10 +51,10 @@ namespace Remote_Healthcare_VR
                     new JProperty("data",
                     new JObject(
                         new JProperty("filename", fileName))));
-            return load.ToString();
+            return load;
         }
 
-        public static string Raycast(int[] start, int[] direction, bool physics)
+        public static JObject Raycast(int[] start, int[] direction, bool physics)
         {
             JObject raycast =
                 new JObject(
@@ -64,12 +64,12 @@ namespace Remote_Healthcare_VR
                         new JProperty("start", start), 
                         new JProperty("direction", direction),
                         new JProperty("physics", physics))));
-            return raycast.ToString();
+            return raycast;
         }
     }
     class Node
     {
-        public string Add(string name, string guid, 
+        public JObject Add(string name, string guid, 
             int[] position, float scale, int[] rotation,
             string filename, bool cullbackfaces, bool animated, string animationname,
             bool smoothnormals, int[] panelSize, int[] panelResolution, int[] background, bool castshadow,
@@ -108,10 +108,47 @@ namespace Remote_Healthcare_VR
                             new JObject(
                                 new JProperty("size", waterSize),
                                 new JProperty("resolulion", waterResolution))))))));
-            return add.ToString();
+            return add;
         }
 
-        public string Update(string id, string parent, int[] position, float scale, int[] rotation, string name, float speed)
+        public JObject Add(string name, bool smoothnormals)
+        {
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("name", name),
+                        new JProperty("components",
+                        new JObject(
+                            new JProperty("terrain",
+                            new JObject(
+                                new JProperty("smoothnormals", smoothnormals))))))));
+            return add;
+        }
+
+        public JObject Add(string name, int[] position, float scale, int[] rotation, bool smoothnormals)
+        {
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("name", name),
+                        new JProperty("components",
+                        new JObject(
+                            new JProperty("transform",
+                            new JObject(
+                                new JProperty("position", position),
+                                new JProperty("scale", scale),
+                                new JProperty("rotation", rotation))),
+                            new JProperty("terrain",
+                            new JObject(
+                                new JProperty("smoothnormals", smoothnormals))))))));
+            return add;
+        }
+
+        public JObject Update(string id, string parent, int[] position, float scale, int[] rotation, string name, float speed)
         {
             JObject update =
                 new JObject(
@@ -129,10 +166,10 @@ namespace Remote_Healthcare_VR
                         new JObject(
                             new JProperty("name", name),
                             new JProperty("speed", speed)))))));
-            return update.ToString();
+            return update;
         }
 
-        public string MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, int time)
+        public JObject MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, int time)
         {
             JObject moveto =
                 new JObject(
@@ -145,10 +182,10 @@ namespace Remote_Healthcare_VR
                         new JProperty("interpolate", interpolate),
                         new JProperty("followheight", followheight),
                         new JProperty("time", time))));
-            return moveto.ToString();
+            return moveto;
         }
 
-        public string MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, float speed)
+        public JObject MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, float speed)
         {
             JObject moveto =
                 new JObject(
@@ -161,10 +198,10 @@ namespace Remote_Healthcare_VR
                         new JProperty("interpolate", interpolate),
                         new JProperty("followheight", followheight),
                         new JProperty("speed", speed))));
-            return moveto.ToString();
+            return moveto;
         }
 
-        public string MoveTo(string id, string stop)
+        public JObject MoveTo(string id, string stop)
         {
             JObject moveto =
                 new JObject(
@@ -173,10 +210,10 @@ namespace Remote_Healthcare_VR
                     new JObject(
                         new JProperty("id", id),
                         new JProperty("stop", stop))));
-            return moveto.ToString();
+            return moveto;
         }
 
-        public string Delete(string id)
+        public JObject Delete(string id)
         {
             JObject delete =
                 new JObject(
@@ -184,10 +221,10 @@ namespace Remote_Healthcare_VR
                     new JProperty("data",
                     new JObject(
                         new JProperty("id", id))));
-            return delete.ToString();
+            return delete;
         }
 
-        public string Find(string name)
+        public JObject Find(string name)
         {
             JObject find =
                 new JObject(
@@ -195,10 +232,10 @@ namespace Remote_Healthcare_VR
                     new JProperty("data",
                     new JObject(
                         new JProperty("name", name))));
-            return find.ToString();
+            return find;
         }
 
-        public string AddLayer(string id, string diffuse, string normal, int minHeight, int maxHeight, float fadeDist)
+        public JObject AddLayer(string id, string diffuse, string normal, int minHeight, int maxHeight, float fadeDist)
         {
             JObject addLayer =
                 new JObject(
@@ -211,23 +248,23 @@ namespace Remote_Healthcare_VR
                         new JProperty("minHeight", minHeight),
                         new JProperty("maxHeight", maxHeight),
                         new JProperty("fadeDist", fadeDist))));
-            return addLayer.ToString();
+            return addLayer;
         }
 
-        public string DelLayer()
+        public JObject DelLayer()
         {
             JObject delLayer =
                 new JObject(
-                    new JProperty("id", "scene/node/find"),
+                    new JProperty("id", "scene/node/dellayer"),
                     new JProperty("data",
                     new JObject()));
-            return delLayer.ToString();
+            return delLayer;
         }
     } 
 
     class Terrain
     {
-        public string Add(float[] size, float[] heights)
+        public JObject Add(float[] size, float[] heights)
         {
             JObject add = 
                 new JObject(
@@ -236,28 +273,28 @@ namespace Remote_Healthcare_VR
                     new JObject(
                         new JProperty("size", size), 
                         new JProperty("heights", heights))));
-            return add.ToString();
+            return add;
         }
 
-        public string Update()
+        public JObject Update()
         {
             JObject update = 
                 new JObject(
                     new JProperty("id", "scene/terrain/update"), 
                     new JProperty("data"));
-            return update.ToString();
+            return update;
         }
 
-        public string Delete() 
+        public JObject Delete() 
         {
             JObject delete = 
                 new JObject(
                     new JProperty("id", "scene/terrain/delete"), 
                     new JProperty("data"));
-            return delete.ToString();
+            return delete;
         }
 
-        public string GetHeight(float[] position, float[] positions) //Volgens mij is dit niet correct!
+        public JObject GetHeight(float[] position, float[] positions) //Volgens mij is dit niet correct!
         {
             JObject getheight = 
                 new JObject(
@@ -266,14 +303,14 @@ namespace Remote_Healthcare_VR
                     new JObject(
                         new JProperty("position", position), 
                         new JProperty("positions", positions))));
-            return getheight.ToString();
+            return getheight;
         }
 
     }
 
     class Panel
     {
-        public string Clear(string id)
+        public JObject Clear(string id)
         {
             JObject clear = 
                 new JObject(
@@ -284,10 +321,10 @@ namespace Remote_Healthcare_VR
                     )
                 )
             );
-            return clear.ToString();
+            return clear;
         }
 
-        public string DrawLines(string id, int width) //Deze werkt nog niet!!!!
+        public JObject DrawLines(string id, int width, List<int[]> lines)
         {
             JObject drawLines = 
                 new JObject(
@@ -300,10 +337,10 @@ namespace Remote_Healthcare_VR
                     )
                 )
             );
-            return drawLines.ToString();
+            return drawLines;
         }
 
-        public string DrawText(string id, string text, float[] position, float size, int[] color, string font)
+        public JObject DrawText(string id, string text, float[] position, float size, int[] color, string font)
         {
             JObject drawText = new JObject(
                 new JProperty("id", "scene/panel/drawtext"),
@@ -318,10 +355,10 @@ namespace Remote_Healthcare_VR
                     )
                 )
             );
-            return drawText.ToString();
+            return drawText;
         }
 
-        public string Image(string id, string imagePath, float[] position, float[] size)
+        public JObject Image(string id, string imagePath, float[] position, float[] size)
         {
             JObject image = new JObject(
                 new JProperty("id", "scene/panel/image"),
@@ -334,10 +371,10 @@ namespace Remote_Healthcare_VR
                     )
                 )
             );
-            return image.ToString();
+            return image;
         }
 
-        public string SetClearColor(string id, int[] color)
+        public JObject SetClearColor(string id, int[] color)
         {
             JObject setClearColor = new JObject(
                 new JProperty("id", "scene/panel/setclearcolor"),
@@ -348,33 +385,33 @@ namespace Remote_Healthcare_VR
                     )
                 )
             );
-            return setClearColor.ToString();
+            return setClearColor;
         }
 
-        public string Swap(string id, List<int[]> lines)
+        public JObject Swap(string id, List<int[]> lines)
         {
             JObject swap = new JObject(
                 new JProperty("id", "scene/panel/swap"),
                 new JProperty("data",
                 new JObject(
                     new JProperty("id", id))));
-            return swap.ToString();
+            return swap;
         }
     }
 
     class Skybox
     {
-        public string SetTime(float time)
+        public JObject SetTime(float time)
         {
             JObject settime = new JObject(
                 new JProperty("id", "scene/skybox/settime"), 
                 new JProperty("data", 
                 new JObject(
                     new JProperty("time", time))));
-            return settime.ToString();
+            return settime;
         }
 
-        public static string Update()
+        public JObject Update()
         {
             JObject update = new JObject(
                 new JProperty("id", "scene/terrain/update"),
@@ -389,7 +426,7 @@ namespace Remote_Healthcare_VR
                         new JProperty("yneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_dn.png"),
                         new JProperty("zpos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_bk.png"),
                         new JProperty("zneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_ft.png"))))));
-            return update.ToString();
+            return update;
         }
 
     }
@@ -398,7 +435,7 @@ namespace Remote_Healthcare_VR
     {
 
         //scene/road/add
-        public string AddRoad(string routeuuid)
+        public JObject Add(string routeuuid)
         {
             JObject AddRoad = new JObject(
                 new JProperty("id", "scene/road/add"), 
@@ -409,11 +446,11 @@ namespace Remote_Healthcare_VR
                 new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
                 new JObject(new JProperty("heightoffset", 0.01)
               )))))));
-            return AddRoad.ToString();
+            return AddRoad;
         }
 
         //scene/road/update
-        public string UpdateRoad(string roaduuid, string routeuuid)
+        public JObject Update(string roaduuid, string routeuuid)
         {
             JObject AddRoad = new JObject(
                 new JProperty("id", "scene/road/update"),
@@ -425,7 +462,7 @@ namespace Remote_Healthcare_VR
                 new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
                 new JObject(new JProperty("heightoffset", 0.01)
               ))))))));
-            return AddRoad.ToString();
+            return AddRoad;
         }
     }
 }

@@ -60,7 +60,7 @@ namespace Remote_Healthcare_VR
             } 
         }
 
-        public static string Add(RouteNode[] RouteNodes)
+        public static JObject Add(RouteNode[] RouteNodes)
         {
 
             JObject Route =
@@ -75,10 +75,10 @@ namespace Remote_Healthcare_VR
                         )
                         )
                     );
-            return Route.ToString();
+            return Route;
         }
 
-        public static string Update(string RouteID, RouteNode[] NewNodes)
+        public static JObject Update(string RouteID, RouteNode[] NewNodes)
         {
             //TODO check if the indexes are correct
             JObject Update =
@@ -93,10 +93,10 @@ namespace Remote_Healthcare_VR
                             )))
                         ))
                     );
-            return Update.ToString();
+            return Update;
         }
 
-        public static string Delete(string RouteID)
+        public static JObject Delete(string RouteID)
         {
             JObject Delete =
                 new JObject(
@@ -105,10 +105,10 @@ namespace Remote_Healthcare_VR
                         new JProperty("id", RouteID)
                         ))
                     );
-            return Delete.ToString();
+            return Delete;
         }
 
-        public static string Follow(string RouteId, string NodeId, double speed, double offset, Rotation rotation, double smoothing, bool followHeight, int[] rotateOffset, int[] positionOffset)
+        public static JObject Follow(string RouteId, string NodeId, double speed, double offset, Rotation rotation, double smoothing, bool followHeight, int[] rotateOffset, int[] positionOffset)
         {
             string rotationValue;
             switch (rotation)
@@ -142,10 +142,10 @@ namespace Remote_Healthcare_VR
                         new JProperty("positionOffset", positionOffset)
                         ))
                     );
-            return Follow.ToString();
+            return Follow;
         }
 
-        public static string SetFollowSpeed(string NodeId, double speed)
+        public static JObject SetFollowSpeed(string NodeId, double speed)
         {
             JObject FollowSpeed =
                 new JObject(
@@ -155,10 +155,10 @@ namespace Remote_Healthcare_VR
                         new JProperty("speed", speed)
                         ))
                     );
-            return FollowSpeed.ToString();
+            return FollowSpeed;
         }
 
-        public static string Show(bool isShown)
+        public static JObject Show(bool isShown)
         {
             JObject Show =
                 new JObject(
@@ -167,7 +167,7 @@ namespace Remote_Healthcare_VR
                         new JProperty("show", isShown)
                         ))
                     );
-            return Show.ToString();
+            return Show;
         }
 
         public enum Rotation

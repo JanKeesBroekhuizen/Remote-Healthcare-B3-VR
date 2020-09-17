@@ -12,45 +12,68 @@ namespace SimpleTCPClient
 {
     class Program
     {
+        private static TcpClient Client;
+        private static string TunnelId;
+
         static void Main(string[] args)
         {
-            //TcpClient client = new TcpClient("145.48.6.10", 6666);
-            //String tunnelId = Init(client);
-
-            Console.WriteLine(Scene.Load("test.txt"));
-
+            Client = new TcpClient("145.48.6.10", 6666);
+            Init();
             
-            float[] heights = new float[255360];
+            float[] heights = new float[65536];
             for (int i = 0; i < 65536; i++)
             {
                 heights[i] = 0;
             }
-            string flatTerain = Scene.Terrain.Add(new float[]{ 256, 256}, heights);
-            string dellayer = Scene.Node.DelLayer();
-            string setTime = Scene.Skybox.SetTime(7.0f);
+            
+            JObject find = Scene.Node.Find("GroundPlane");
+            WriteTextMessage(generateMessage(find));
+            JObject response = ReadTextMessage();
+            var uuid = response["data"]["data"]["data"][0]["uuid"];
 
+            JObject flatTerain = Scene.Terrain.Add(new float[] { 256, 256 }, heights);
+            WriteTextMessage(generateMessage(flatTerain));
+            ReadTextMessage();
+
+            JObject grondRender = Scene.Node.Add("Grond", new int[]{ -40, 0, -40 }, 1, new int[]{ 0, 0, 0 }, false);
+            WriteTextMessage(generateMessage(grondRender));
+            ReadTextMessage();
+
+            JObject delNode = Scene.Node.Delete((string)uuid);
+            WriteTextMessage(generateMessage(delNode));
+            ReadTextMessage();
+
+            JObject setTime = Scene.Skybox.SetTime(7.0f);
+            WriteTextMessage(generateMessage(setTime));
+            ReadTextMessage();
         }
 
-        static string Init(TcpClient client)
+        static void Init()
         {
-            WriteTextMessage(client, "{\"id\":\"session/list\"}");
+            WriteTextMessage("{\"id\":\"session/list\"}");
 
-            JObject response = ReadTextMessage(client); // stap 2 (get response)
+            JObject response = ReadTextMessage(); // stap 2 (get response)
 
+            
             var sessionId = response["data"][0]["id"];
             //Console.WriteLine(sessionId); // stap 3 (getting id)
 
-            WriteTextMessage(client, "{\"id\":\"tunnel/create\",\"data\":{\"session\":\"" + sessionId + "\"}}");
+            WriteTextMessage("{\"id\":\"tunnel/create\",\"data\":{\"session\":\"" + sessionId + "\"}}");
 
-            response = ReadTextMessage(client); // stap 4 (get response)
+            response = ReadTextMessage(); // stap 4 (get response)
             var tunnelId = response["data"]["id"];
             //Console.WriteLine(tunnelId);
-            return (string)tunnelId;
+
+            TunnelId = (string)tunnelId;
+
+            WriteTextMessage(generateMessage(Scene.Reset()));
+
+            response = ReadTextMessage();
         }
 
-        public static void WriteTextMessage(TcpClient client, String message)
+        public static void WriteTextMessage(String message)
         {
-            var stream = client.GetStream();
+            var stream = Client.GetStream();
             {
                 Console.WriteLine("WriteTextMessage()");
                 int messageLength = message.Length;
@@ -68,10 +91,10 @@ namespace SimpleTCPClient
             }
         }
 
-        public static JObject ReadTextMessage(TcpClient client)
+        public static JObject ReadTextMessage()
         {
 
-            var stream = client.GetStream();
+            var stream = Client.GetStream();
             {
                 Console.WriteLine("ReadTextMessage()");
                 byte[] messageLength = new byte[4];
@@ -98,9 +121,21 @@ namespace SimpleTCPClient
                 //Console.WriteLine(Encoding.ASCII.GetString(message));
 
                 JObject messageJson = JObject.Parse(Encoding.UTF8.GetString(message));
-                Console.WriteLine(messageJson);
+                Console.WriteLine(messageJson + "\n\n\n\n");
                 return messageJson;
             }
+        }
+
+        public static string generateMessage(JObject message)
+        {
+            JObject totalMessage =
+                new JObject(
+                    new JProperty("id", "tunnel/send"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("dest", TunnelId),
+                        new JProperty("data", new JObject(message)))));
+            return totalMessage.ToString();
         }
     }
 }
