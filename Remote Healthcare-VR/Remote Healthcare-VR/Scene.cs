@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -274,25 +275,32 @@ namespace Remote_Healthcare_VR
     {
         public string Clear(string id)
         {
-            JObject clear = new JObject(
+            JObject clear = 
+                new JObject(
                 new JProperty("id", "scene/panel/clear"),
                 new JProperty("data", 
-                new JObject(
-                    new JProperty("id", id))));
-
+                    new JObject(
+                        new JProperty("id", id)
+                    )
+                )
+            );
             return clear.ToString();
         }
 
         public string DrawLines(string id, int width) //Deze werkt nog niet!!!!
         {
-            JObject image = new JObject(
+            JObject drawLines = 
+                new JObject(
                 new JProperty("id", "scene/panel/drawlines"),
                 new JProperty("data",
-                new JObject(
-                    new JProperty("id", id),
-                    new JProperty("width", width),
-                    new JProperty("position", ""))));
-            return "";
+                    new JObject(
+                        new JProperty("id", id),
+                        new JProperty("width", width),
+                        new JProperty("lines", from l in lines select new JArray(l))
+                    )
+                )
+            );
+            return drawLines.ToString();
         }
 
         public string DrawText(string id, string text, float[] position, float size, int[] color, string font)
@@ -300,13 +308,16 @@ namespace Remote_Healthcare_VR
             JObject drawText = new JObject(
                 new JProperty("id", "scene/panel/drawtext"),
                 new JProperty("data",
-                new JObject(
-                    new JProperty("id", id),
-                    new JProperty("text", text),
-                    new JProperty("position", position),
-                    new JProperty("size", size),
-                    new JProperty("color", color),
-                    new JProperty("font", font))));
+                    new JObject(
+                        new JProperty("id", id),
+                        new JProperty("text", text),
+                        new JProperty("position", position),
+                        new JProperty("size", size),
+                        new JProperty("color", color),
+                        new JProperty("font", font)
+                    )
+                )
+            );
             return drawText.ToString();
         }
 
@@ -315,11 +326,14 @@ namespace Remote_Healthcare_VR
             JObject image = new JObject(
                 new JProperty("id", "scene/panel/image"),
                 new JProperty("data",
-                new JObject(
-                    new JProperty("id", id),
-                    new JProperty("image", imagePath),
-                    new JProperty("position", position),
-                    new JProperty("size", size))));
+                    new JObject(
+                        new JProperty("id", id),
+                        new JProperty("image", imagePath),
+                        new JProperty("position", position),
+                        new JProperty("size", size)
+                    )
+                )
+            );
             return image.ToString();
         }
 
@@ -328,9 +342,12 @@ namespace Remote_Healthcare_VR
             JObject setClearColor = new JObject(
                 new JProperty("id", "scene/panel/setclearcolor"),
                 new JProperty("data",
-                new JObject(
-                    new JProperty("id", id),
-                    new JProperty("color", color))));
+                    new JObject(
+                        new JProperty("id", id),
+                        new JProperty("color", color)
+                    )
+                )
+            );
             return setClearColor.ToString();
         }
 
