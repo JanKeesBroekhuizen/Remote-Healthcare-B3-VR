@@ -370,8 +370,30 @@ namespace Remote_Healthcare_VR
     {
         public static string SetTime(string time)
         {
-            JObject settime = new JObject(new JProperty("id", "scene/skybox/settime"), new JProperty("data", new JObject(new JProperty("time", time))));
+            JObject settime = new JObject(
+                new JProperty("id", "scene/skybox/settime"), 
+                new JProperty("data", 
+                new JObject(
+                    new JProperty("time", time))));
             return settime.ToString();
+        }
+
+        public static string Update()
+        {
+            JObject update = new JObject(
+                new JProperty("id", "scene/terrain/update"),
+                new JProperty("data", 
+                new JObject(
+                    new JProperty("type", "static"),
+                    new JProperty("files", 
+                    new JObject(
+                        new JProperty("xpos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_rt.png"),
+                        new JProperty("xneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_lf.png"),
+                        new JProperty("ypos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_up.png"),
+                        new JProperty("yneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_dn.png"),
+                        new JProperty("zpos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_bk.png"),
+                        new JProperty("zneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_ft.png"))))));
+            return update.ToString();
         }
 
     }
@@ -379,6 +401,36 @@ namespace Remote_Healthcare_VR
     class Road
     {
 
+        //scene/road/add
+        public static string AddRoad(string routeuuid)
+        {
+            JObject AddRoad = new JObject(
+                new JProperty("id", "scene/road/add"), 
+                new JProperty("data", 
+                new JObject(new JProperty("route", routeuuid), 
+                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                new JObject(new JProperty("heightoffset", 0.01)
+              )))))));
+            return AddRoad.ToString();
+        }
+
+        //scene/road/update
+        public static string UpdateRoad(string roaduuid, string routeuuid)
+        {
+            JObject AddRoad = new JObject(
+                new JProperty("id", "scene/road/update"),
+                new JProperty("data",
+                new JObject(new JProperty("id", roaduuid),
+                new JObject(new JProperty("route", routeuuid),
+                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                new JObject(new JProperty("heightoffset", 0.01)
+              ))))))));
+            return AddRoad.ToString();
+        }
     }
 }
 

@@ -17,8 +17,6 @@ namespace SimpleTCPClient
             TcpClient client = new TcpClient("145.48.6.10", 6666);
 
             String tunnelId = Init(client);
-            Scene.Get();           
-            
         }
 
         static string Init(TcpClient client)
@@ -38,7 +36,7 @@ namespace SimpleTCPClient
             return (string)tunnelId;
         }
 
-        public static void WriteTextMessage(TcpClient client, string message)
+        public static void WriteTextMessage(TcpClient client, String message)
         {
             var stream = client.GetStream();
             {
