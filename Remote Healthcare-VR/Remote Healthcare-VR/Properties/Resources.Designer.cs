@@ -63,7 +63,6 @@ namespace Remote_Healthcare_VR.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Tree {
             get {
                 object obj = ResourceManager.GetObject("Tree", resourceCulture);
                 return ((byte[])(obj));
@@ -71,3 +70,5 @@ namespace Remote_Healthcare_VR.Properties {
         }
     }
 }
+
+        internal static byte[] Tree {
