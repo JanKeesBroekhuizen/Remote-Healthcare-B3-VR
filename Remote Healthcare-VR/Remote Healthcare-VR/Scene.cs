@@ -111,6 +111,33 @@ namespace Remote_Healthcare_VR
             return add;
         }
 
+        public JObject Add(string name,
+            int[] position, float scale, int[] rotation,
+            string filename, bool cullbackfaces, bool animated, string animationname)
+        {
+            JObject add =
+    new JObject(
+        new JProperty("id", "scene/node/add"),
+        new JProperty("data",
+        new JObject(
+            new JProperty("name", name),
+            new JProperty("components",
+            new JObject(
+                new JProperty("transform",
+                new JObject(
+                    new JProperty("position", position),
+                    new JProperty("scale", scale),
+                    new JProperty("rotation", rotation))),
+                new JProperty("model",
+                new JObject(
+                    new JProperty("file", filename),
+                    new JProperty("cullbackfaces", cullbackfaces),
+                    new JProperty("animated", animated),
+                    new JProperty("animation", animationname))))))));
+            return add;
+
+        }
+
         public JObject Add(string name, bool smoothnormals)
         {
             JObject add =

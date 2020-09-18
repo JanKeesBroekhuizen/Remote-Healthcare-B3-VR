@@ -19,13 +19,13 @@ namespace SimpleTCPClient
         {
             Client = new TcpClient("145.48.6.10", 6666);
             Init();
-            
+
             float[] heights = new float[65536];
             for (int i = 0; i < 65536; i++)
             {
                 heights[i] = 0;
             }
-            
+
             JObject find = Scene.Node.Find("GroundPlane");
             WriteTextMessage(generateMessage(find));
             JObject response = ReadTextMessage();
@@ -35,7 +35,7 @@ namespace SimpleTCPClient
             WriteTextMessage(generateMessage(flatTerain));
             ReadTextMessage();
 
-            JObject grondRender = Scene.Node.Add("Grond", new int[]{ -40, 0, -40 }, 1, new int[]{ 0, 0, 0 }, false);
+            JObject grondRender = Scene.Node.Add("Grond", new int[] { -40, 0, -40 }, 1, new int[] { 0, 0, 0 }, false);
             WriteTextMessage(generateMessage(grondRender));
             ReadTextMessage();
 
@@ -45,6 +45,10 @@ namespace SimpleTCPClient
 
             JObject setTime = Scene.Skybox.SetTime(7.0f);
             WriteTextMessage(generateMessage(setTime));
+            ReadTextMessage();
+
+            JObject addTree = Scene.Node.Add("tree", new int[] { 10, 0, 10 }, 1, new int[] { 0, 0, 0 }, "Resources/Tree.obj", true, false, "no");
+            WriteTextMessage(generateMessage(addTree));
             ReadTextMessage();
         }
 
