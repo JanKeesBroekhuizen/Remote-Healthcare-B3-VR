@@ -61,12 +61,32 @@ namespace Remote_Healthcare_VR.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] _20391_Party_Bike_v1_NEW {
+            get {
+                object obj = ResourceManager.GetObject("_20391_Party_Bike_v1_NEW", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Height_Map1 {
             get {
                 object obj = ResourceManager.GetObject("Height_Map1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Tree {
+            get {
+                object obj = ResourceManager.GetObject("Tree", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

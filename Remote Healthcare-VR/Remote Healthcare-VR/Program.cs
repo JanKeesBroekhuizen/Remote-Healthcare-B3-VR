@@ -49,21 +49,27 @@ namespace SimpleTCPClient
             ReadTextMessage();
 
             //node objects
-            JObject addTree1 = Scene.Node.Add("tree1", new int[] { 10, 0, 10 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree1 = Scene.Node.Add("tree1", new int[] { 25, 0, 10 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
             WriteTextMessage(generateMessage(addTree1));
             ReadTextMessage();
 
-            JObject addTree2 = Scene.Node.Add("tree2", new int[] { 9, 0, 9 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree2 = Scene.Node.Add("tree2", new int[] { 7, 0, 12 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
             WriteTextMessage(generateMessage(addTree2));
             ReadTextMessage();
 
-            JObject addTree3 = Scene.Node.Add("tree3", new int[] { 8, 0, 8 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree3 = Scene.Node.Add("tree3", new int[] { 3, 0, 9 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
             WriteTextMessage(generateMessage(addTree3));
             ReadTextMessage();
 
-            JObject addTree4 = Scene.Node.Add("tree4", new int[] { 7, 0, 7 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree4 = Scene.Node.Add("tree4", new int[] { 14, 0, 1 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
             WriteTextMessage(generateMessage(addTree4));
             ReadTextMessage();
+
+            Console.WriteLine("Add car");
+            JObject addCar = Scene.Node.Add("car", new int[] { 15, 0, 15 }, 0.01f, new int[] { 0, 90, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Party_Bike_v1_L1.123c4456ce2b-9560-4051-8040-9c1998def616/20391_Party_Bike_v1_NEW.obj", true, false, "no");
+            WriteTextMessage(generateMessage(addCar));
+            response = ReadTextMessage();
+            var carUuid = response["data"]["data"]["data"]["uuid"];
 
             //add new route
             Route.RouteNode[] routeNodes = new Route.RouteNode[4];
@@ -81,8 +87,13 @@ namespace SimpleTCPClient
             //add a road over the route 
             JObject addRoad = Scene.Road.Add((string)routeUuid);
             WriteTextMessage(generateMessage(addRoad));
-            response = ReadTextMessage();
-            
+            ReadTextMessage();
+
+            JObject followRoute = Route.Follow((string)routeUuid, (string)carUuid, 1.0, 0.0, Route.Rotation.XZ, 1.0, false, new int[] { 0, 0, 0 }, new int[] { 0, 0, 0 });
+            WriteTextMessage(generateMessage(followRoute));
+            ReadTextMessage();
+
+
         }
 
         static void Init()

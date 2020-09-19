@@ -115,7 +115,7 @@ namespace Remote_Healthcare_VR
 
         public JObject Add(string name,
             int[] position, float scale, int[] rotation,
-            string filename, bool cullbackfaces, bool animated, string animationname)
+             string filename, bool cullbackfaces, bool animated, string animationname)
         {
             JObject add =
     new JObject(
