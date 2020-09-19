@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Remote_Healthcare_VR;
 using System;
 using System.Collections;
@@ -14,38 +15,33 @@ namespace SimpleTCPClient
     class Program
     {
         private static TcpClient Client;
-        private static string TunnelId;
+        private static string TunnelId; 
 
         static void Main(string[] args)
         {
             Client = new TcpClient("145.48.6.10", 6666);
             Init();
-
-            float[] heights = new float[65536];
-            for (int i = 0; i < 65536; i++)
-            {
-                heights[i] = 3;
-            }
+            //SaveBaseObjects();
 
             JObject find = Scene.Node.Find("GroundPlane");
-            WriteTextMessage(generateMessage(find));
+            WriteTextMessage(GenerateMessage(find));
             JObject response = ReadTextMessage();
             var uuid = response["data"]["data"]["data"][0]["uuid"];
 
-            JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map1);
-            WriteTextMessage(generateMessage(flatTerain));
+            JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map2);
+            WriteTextMessage(GenerateMessage(flatTerain));
             ReadTextMessage();
 
             JObject grondRender = Scene.Node.Add("Grond", new int[] { -40, 0, -40 }, 1, new int[] { 0, 0, 0 }, true);
-            WriteTextMessage(generateMessage(grondRender));
+            WriteTextMessage(GenerateMessage(grondRender));
             ReadTextMessage();
 
             JObject delNode = Scene.Node.Delete((string)uuid);
-            WriteTextMessage(generateMessage(delNode));
+            WriteTextMessage(GenerateMessage(delNode));
             ReadTextMessage();
 
             JObject setTime = Scene.Skybox.SetTime(7.0f);
-            WriteTextMessage(generateMessage(setTime));
+            WriteTextMessage(GenerateMessage(setTime));
             ReadTextMessage();
 
             //node objects
@@ -170,7 +166,7 @@ namespace SimpleTCPClient
             }
         }
 
-        public static string generateMessage(JObject message)
+        public static string GenerateMessage(JObject message)
         {
             /*JObject totalMessage =
                 new JObject(
@@ -182,6 +178,58 @@ namespace SimpleTCPClient
 
             JObject totalMessage = new JObject(new JProperty("id", "tunnel/send"), new JProperty("data", new JObject(new JProperty("dest", TunnelId), new JProperty("data", new JObject(message)))));
             return totalMessage.ToString();
+        }
+
+        public static void SaveObjects(JObject json/*, VRObjects objectType*/)
+        {
+            string jsonString = json.ToString();
+            bool nextIsName = false;
+            bool nextIsUuid = false;
+
+            string name = "";
+            string uuid = "";
+            JsonTextReader reader = new JsonTextReader(new StringReader(jsonString));
+            while(reader.Read()) 
+            {
+                if (reader.Value != null)
+                {
+                    if (nextIsName)
+                    {
+                        name = (string)reader.Value;
+                        nextIsName = false;
+
+                    }else if (nextIsUuid)
+                    {
+                        uuid = (string)reader.Value;
+                        nextIsUuid = false;
+
+                    }else if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "name")
+                    {
+                        nextIsName = true;
+
+                    }else if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "uuid")
+                    {
+                        nextIsUuid = true;
+
+                    }
+                }
+                if (name != "" && uuid != "")
+                {
+                    //TODO: save it here
+                    Console.WriteLine("Name: {0} \nuuid: {1}", name, uuid);
+
+                    name = "";
+                    uuid = "";
+                }
+            }
+        }
+
+        public static void SaveBaseObjects()
+        {
+            JObject get = Scene.Get();
+            WriteTextMessage(GenerateMessage(get));
+            JObject response = ReadTextMessage();
+            SaveObjects(response/*, VRObjects.BASE*/);
         }
     }
 }

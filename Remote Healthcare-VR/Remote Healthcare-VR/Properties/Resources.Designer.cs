@@ -61,6 +61,15 @@ namespace Remote_Healthcare_VR.Properties {
         }
         
         /// <summary>
+        /// </summary>
+        public static byte[] Chevrolet_Camaro {
+            get {
+                object obj = ResourceManager.GetObject("Chevrolet_Camaro", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] _20391_Party_Bike_v1_NEW {
@@ -76,6 +85,16 @@ namespace Remote_Healthcare_VR.Properties {
         public static System.Drawing.Bitmap Height_Map1 {
             get {
                 object obj = ResourceManager.GetObject("Height_Map1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Height_Map2 {
+            get {
+                object obj = ResourceManager.GetObject("Height_Map2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

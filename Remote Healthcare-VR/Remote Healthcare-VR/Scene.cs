@@ -351,7 +351,7 @@ namespace Remote_Healthcare_VR
             {
                 for (int y = 0; y < bitMap.Height; y++)
                 {
-                    float redValue = (bitMap.GetPixel(x, y).R) / 128f - 1f;
+                    float redValue = (bitMap.GetPixel(x, y).R) / 16 - 8f;
                     heights[(x * bitMap.Height) + y] = redValue;
                 }
             }
