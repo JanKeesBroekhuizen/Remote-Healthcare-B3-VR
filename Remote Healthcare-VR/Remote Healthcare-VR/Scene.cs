@@ -462,34 +462,35 @@ namespace Remote_Healthcare_VR
     {
 
         //scene/road/add
-        public JObject Add(string routeuuid)
+        public JObject Add(string routeUuid)
         {
             JObject AddRoad = new JObject(
                 new JProperty("id", "scene/road/add"), 
                 new JProperty("data", 
-                new JObject(new JProperty("route", routeuuid), 
-                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
-                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
-                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
-                new JObject(new JProperty("heightoffset", 0.01)
-              )))))));
+                new JObject(new JProperty("route", routeUuid), 
+                    new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                    new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                    new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                    new JProperty("heightoffset", 0.01)
+              )));
             return AddRoad;
         }
 
         //scene/road/update
-        public JObject Update(string roaduuid, string routeuuid)
+        public JObject Update(string roadUuid, string routeUuid)
         {
-            JObject AddRoad = new JObject(
+            JObject updateRoad = new JObject(
                 new JProperty("id", "scene/road/update"),
                 new JProperty("data",
-                new JObject(new JProperty("id", roaduuid),
-                new JObject(new JProperty("route", routeuuid),
-                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
-                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
-                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
-                new JObject(new JProperty("heightoffset", 0.01)
-              ))))))));
-            return AddRoad;
+                new JObject(
+                    new JProperty("id", roadUuid),
+                    new JProperty("route", routeUuid),
+                    new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                    new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                    new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                    new JProperty("heightoffset", 0.01)
+              )));
+            return updateRoad;
         }
     }
 }
