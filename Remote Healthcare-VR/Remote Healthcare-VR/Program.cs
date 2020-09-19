@@ -2,6 +2,7 @@
 using Remote_Healthcare_VR;
 using System;
 using System.Collections;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -31,11 +32,11 @@ namespace SimpleTCPClient
             JObject response = ReadTextMessage();
             var uuid = response["data"]["data"]["data"][0]["uuid"];
 
-            JObject flatTerain = Scene.Terrain.Add(new float[] { 256, 256 }, heights);
+            JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map1);
             WriteTextMessage(generateMessage(flatTerain));
             ReadTextMessage();
 
-            JObject grondRender = Scene.Node.Add("Grond", new int[] { -40, 0, -40 }, 1, new int[] { 0, 0, 0 }, false);
+            JObject grondRender = Scene.Node.Add("Grond", new int[] { -40, 0, -40 }, 1, new int[] { 0, 0, 0 }, true);
             WriteTextMessage(generateMessage(grondRender));
             ReadTextMessage();
 

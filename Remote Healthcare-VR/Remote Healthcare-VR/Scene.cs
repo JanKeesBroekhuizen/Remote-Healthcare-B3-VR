@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Remote_Healthcare_VR
@@ -175,6 +177,42 @@ namespace Remote_Healthcare_VR
             return add;
         }
 
+        public JObject Add(string name, int[] waterSize, float waterResolution)
+        {
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("name", name),
+                        new JProperty("components",
+                        new JObject(
+                            new JProperty("water",
+                            new JObject(
+                                new JProperty("size", waterSize),
+                                new JProperty("resolulion", waterResolution))))))));
+            return add;
+        }
+
+        public JObject Add(string name, int[] panelSize, int[] panelResolution, int[] background, bool castshadow)
+        {
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("name", name),
+                        new JProperty("components",
+                        new JObject(
+                            new JProperty("panel",
+                            new JObject(
+                                new JProperty("size", panelSize),
+                                new JProperty("resolution", panelResolution),
+                                new JProperty("background", background),
+                                new JProperty("castShadow", castshadow))))))));
+            return add;
+        }
+
         public JObject Update(string id, string parent, int[] position, float scale, int[] rotation, string name, float speed)
         {
             JObject update =
@@ -299,6 +337,31 @@ namespace Remote_Healthcare_VR
                     new JProperty("data", 
                     new JObject(
                         new JProperty("size", size), 
+                        new JProperty("heights", heights))));
+            return add;
+        }
+
+        public JObject Add(Image image)
+        {
+            Bitmap bitMap = new Bitmap(image);
+            float[] size = new float[] { bitMap.Width, bitMap.Height };
+
+            float[] heights = new float[bitMap.Width * bitMap.Height];
+            for (int x = 0; x < bitMap.Width; x++)
+            {
+                for (int y = 0; y < bitMap.Height; y++)
+                {
+                    float redValue = (bitMap.GetPixel(x, y).R) / 128f - 1f;
+                    heights[(x * bitMap.Height) + y] = redValue;
+                }
+            }
+
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/terrain/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("size", size),
                         new JProperty("heights", heights))));
             return add;
         }
