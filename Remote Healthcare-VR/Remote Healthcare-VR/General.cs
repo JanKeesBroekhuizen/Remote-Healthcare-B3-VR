@@ -12,7 +12,8 @@ namespace Remote_Healthcare_VR
             JObject Get = new JObject(
                 new JProperty("id", "get"),
                 new JProperty("data",
-                new JObject(new JProperty("type", head)
+                new JObject(
+                    new JProperty("type", head)
               )));
             return Get;
         }
@@ -22,10 +23,11 @@ namespace Remote_Healthcare_VR
             JObject SetCallBack = new JObject(
                 new JProperty("id", "setcallback"),
                 new JProperty("data",
-                new JObject(new JProperty("type", button),
-                new JObject(new JProperty("button", trigger),
-                new JObject(new JProperty("hand", left)
-              )))));
+                new JObject(
+                    new JProperty("type", button),
+                    new JProperty("button", trigger),
+                    new JProperty("hand", left)
+              )));
             return SetCallBack;
         }
 

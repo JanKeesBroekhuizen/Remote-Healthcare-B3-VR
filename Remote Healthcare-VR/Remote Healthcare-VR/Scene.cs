@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Remote_Healthcare_VR
@@ -113,7 +115,7 @@ namespace Remote_Healthcare_VR
 
         public JObject Add(string name,
             int[] position, float scale, int[] rotation,
-            string filename, bool cullbackfaces, bool animated, string animationname)
+             string filename, bool cullbackfaces, bool animated, string animationname)
         {
             JObject add =
     new JObject(
@@ -172,6 +174,42 @@ namespace Remote_Healthcare_VR
                             new JProperty("terrain",
                             new JObject(
                                 new JProperty("smoothnormals", smoothnormals))))))));
+            return add;
+        }
+
+        public JObject Add(string name, int[] waterSize, float waterResolution)
+        {
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("name", name),
+                        new JProperty("components",
+                        new JObject(
+                            new JProperty("water",
+                            new JObject(
+                                new JProperty("size", waterSize),
+                                new JProperty("resolulion", waterResolution))))))));
+            return add;
+        }
+
+        public JObject Add(string name, int[] panelSize, int[] panelResolution, int[] background, bool castshadow)
+        {
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("name", name),
+                        new JProperty("components",
+                        new JObject(
+                            new JProperty("panel",
+                            new JObject(
+                                new JProperty("size", panelSize),
+                                new JProperty("resolution", panelResolution),
+                                new JProperty("background", background),
+                                new JProperty("castShadow", castshadow))))))));
             return add;
         }
 
@@ -299,6 +337,31 @@ namespace Remote_Healthcare_VR
                     new JProperty("data", 
                     new JObject(
                         new JProperty("size", size), 
+                        new JProperty("heights", heights))));
+            return add;
+        }
+
+        public JObject Add(Image image)
+        {
+            Bitmap bitMap = new Bitmap(image);
+            float[] size = new float[] { bitMap.Width, bitMap.Height };
+
+            float[] heights = new float[bitMap.Width * bitMap.Height];
+            for (int x = 0; x < bitMap.Width; x++)
+            {
+                for (int y = 0; y < bitMap.Height; y++)
+                {
+                    float redValue = (bitMap.GetPixel(x, y).R) / 16 - 8f;
+                    heights[(x * bitMap.Height) + y] = redValue;
+                }
+            }
+
+            JObject add =
+                new JObject(
+                    new JProperty("id", "scene/terrain/add"),
+                    new JProperty("data",
+                    new JObject(
+                        new JProperty("size", size),
                         new JProperty("heights", heights))));
             return add;
         }
@@ -462,34 +525,35 @@ namespace Remote_Healthcare_VR
     {
 
         //scene/road/add
-        public JObject Add(string routeuuid)
+        public JObject Add(string routeUuid)
         {
             JObject AddRoad = new JObject(
                 new JProperty("id", "scene/road/add"), 
                 new JProperty("data", 
-                new JObject(new JProperty("route", routeuuid), 
-                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
-                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
-                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
-                new JObject(new JProperty("heightoffset", 0.01)
-              )))))));
+                new JObject(new JProperty("route", routeUuid), 
+                    new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                    new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                    new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                    new JProperty("heightoffset", 0.01)
+              )));
             return AddRoad;
         }
 
         //scene/road/update
-        public JObject Update(string roaduuid, string routeuuid)
+        public JObject Update(string roadUuid, string routeUuid)
         {
-            JObject AddRoad = new JObject(
+            JObject updateRoad = new JObject(
                 new JProperty("id", "scene/road/update"),
                 new JProperty("data",
-                new JObject(new JProperty("id", roaduuid),
-                new JObject(new JProperty("route", routeuuid),
-                new JObject(new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
-                new JObject(new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
-                new JObject(new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
-                new JObject(new JProperty("heightoffset", 0.01)
-              ))))))));
-            return AddRoad;
+                new JObject(
+                    new JProperty("id", roadUuid),
+                    new JProperty("route", routeUuid),
+                    new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                    new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                    new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                    new JProperty("heightoffset", 0.01)
+              )));
+            return updateRoad;
         }
     }
 }
