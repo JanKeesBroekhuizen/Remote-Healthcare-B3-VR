@@ -26,8 +26,8 @@ namespace Remote_Healthcare_VR
         public static JObject Reset()
         {
             JObject reset = 
-                new JObject(
-                    new JProperty("id", "scene/reset"));
+            new JObject(
+            new JProperty("id", "scene/reset"));
             return reset;
         }
 

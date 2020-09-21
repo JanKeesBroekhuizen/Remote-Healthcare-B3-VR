@@ -2,6 +2,7 @@
 using Remote_Healthcare_VR;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -14,9 +15,14 @@ namespace SimpleTCPClient
     {
         private static TcpClient Client;
         private static string TunnelId;
+        enum VRObjects { TERRAIN, PANEL, ROUTE, ROAD, NODE }
+
+
+
 
         static void Main(string[] args)
         {
+         
             Client = new TcpClient("145.48.6.10", 6666);
             Init();
 
@@ -25,6 +31,20 @@ namespace SimpleTCPClient
             {
                 heights[i] = 0;
             }
+
+            //Example methods dictionary
+
+            VRObject object1 = new VRObject(VRObjects.NODE, "Object 1", 12345);
+            VRObject object2 = new VRObject(VRObjects.PANEL, "Object 2", 45678);
+            VRObject object3 = new VRObject(VRObjects.ROAD, "Object 3", 87654);
+            VRObject object4 = new VRObject(VRObjects.ROUTE, "Object 4", 98666);
+
+            int tempcounter = TotalDictionaryEntries();
+            Console.WriteLine(LookupEntries(VRObjects.TERRAIN));
+
+            // End Example Dictionary
+
+
 
             JObject find = Scene.Node.Find("GroundPlane");
             WriteTextMessage(generateMessage(find));
@@ -58,7 +78,9 @@ namespace SimpleTCPClient
 
             JObject response = ReadTextMessage(); // stap 2 (get response)
 
-            
+
+           
+
             var sessionId = response["data"][0]["id"];
             //Console.WriteLine(sessionId); // stap 3 (getting id)
 
@@ -70,6 +92,7 @@ namespace SimpleTCPClient
 
             TunnelId = (string)tunnelId;
 
+            
             WriteTextMessage(generateMessage(Scene.Reset()));
 
             response = ReadTextMessage();
@@ -103,7 +126,7 @@ namespace SimpleTCPClient
                 Console.WriteLine("ReadTextMessage()");
                 byte[] messageLength = new byte[4];
                 int length = stream.Read(messageLength, 0, 4);
-                //foreach (byte b in messageLength)
+                foreach (byte b in messageLength)
                 //{
                 //    Console.WriteLine(b + " ");
                 //}
@@ -141,5 +164,70 @@ namespace SimpleTCPClient
                         new JProperty("data", new JObject(message)))));
             return totalMessage.ToString();
         }
-    }
+
+        public static int TotalDictionaryEntries()
+        {
+            
+            return VRObject.TerrainDictionary.Count + VRObject.PanelDictionary.Count + VRObject.RouteDictionary.Count + VRObject.RoadDictionary.Count + VRObject.NodeDictionary.Count;
+        }
+
+        public static ArrayList LookupEntries(Enum ObjectName)
+        {
+            ArrayList ReturnList = new ArrayList();
+
+            if (ObjectName.ToString().Equals(VRObjects.NODE.ToString())) {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.NodeDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(VRObjects.ROAD.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.RoadDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(VRObjects.ROUTE.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.RouteDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(VRObjects.PANEL.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.PanelDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(VRObjects.TERRAIN.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.TerrainDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+
+            return ReturnList;
+
+        }
+           
+
+
+
+
+
+        }
 }
