@@ -1,5 +1,6 @@
 ﻿using SimpleTCPClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -49,11 +50,75 @@ namespace Remote_Healthcare_VR
             }
 
 
+
+
         }
 
 
 
+        public static int TotalDictionaryEntries()
+        {
+
+            return VRObject.TerrainDictionary.Count + VRObject.PanelDictionary.Count + VRObject.RouteDictionary.Count + VRObject.RoadDictionary.Count + VRObject.NodeDictionary.Count;
+        }
+
+        public static ArrayList LookupEntries(Enum ObjectName)
+        {
+            ArrayList ReturnList = new ArrayList();
+
+            if (ObjectName.ToString().Equals(Program.VRObjects.NODE.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.NodeDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(Program.VRObjects.ROAD.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.RoadDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(Program.VRObjects.ROUTE.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.RouteDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(Program.VRObjects.PANEL.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.PanelDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+            if (ObjectName.ToString().Equals(Program.VRObjects.TERRAIN.ToString()))
+            {
+                foreach (KeyValuePair<String, int> vrobject in VRObject.TerrainDictionary)
+                {
+                    Console.WriteLine("Key: {0}, Value: {1}",
+                    vrobject.Key, vrobject.Value);
+                }
+            }
+
+
+            return ReturnList;
+
+        }
+
     }
 
     
+
+
 }
