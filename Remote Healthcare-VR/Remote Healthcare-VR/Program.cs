@@ -38,8 +38,10 @@ namespace SimpleTCPClient
             VRObject object3 = new VRObject(VRObjects.ROAD, "Object 3", 87654);
             VRObject object4 = new VRObject(VRObjects.ROUTE, "Object 4", 98666);
 
-            int tempcounter = TotalDictionaryEntries();
-            Console.WriteLine(LookupEntries(VRObjects.TERRAIN));
+           
+
+            int tempcounter = VRObject.TotalDictionaryEntries();
+            Console.WriteLine(VRObject.LookupEntries(VRObjects.TERRAIN));
 
             // End Example Dictionary
 
