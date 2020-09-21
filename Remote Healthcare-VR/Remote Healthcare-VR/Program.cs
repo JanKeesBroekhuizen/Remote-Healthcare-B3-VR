@@ -23,11 +23,13 @@ namespace SimpleTCPClient
             Init();
             //SaveBaseObjects();
 
+            //Get groundplane id
             JObject find = Scene.Node.Find("GroundPlane");
             WriteTextMessage(GenerateMessage(find));
             JObject response = ReadTextMessage();
             var uuid = response["data"]["data"]["data"][0]["uuid"];
 
+            //exercise 3a and exercise 3e: add terrain (flat and with heights)
             JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map2);
             WriteTextMessage(GenerateMessage(flatTerain));
             ReadTextMessage();
@@ -36,38 +38,40 @@ namespace SimpleTCPClient
             WriteTextMessage(GenerateMessage(grondRender));
             ReadTextMessage();
 
+            //exercise 3b: delete groundplane
             JObject delNode = Scene.Node.Delete((string)uuid);
             WriteTextMessage(GenerateMessage(delNode));
             ReadTextMessage();
 
+            //exercise 3c: change time skybox
             JObject setTime = Scene.Skybox.SetTime(7.0f);
             WriteTextMessage(GenerateMessage(setTime));
             ReadTextMessage();
 
-            //node objects
+            //exercise 3d: add 3D models
             JObject addTree1 = Scene.Node.Add("tree1", new int[] { 25, 0, 10 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
-            WriteTextMessage(generateMessage(addTree1));
+            WriteTextMessage(GenerateMessage(addTree1));
             ReadTextMessage();
 
             JObject addTree2 = Scene.Node.Add("tree2", new int[] { 7, 0, 12 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
-            WriteTextMessage(generateMessage(addTree2));
+            WriteTextMessage(GenerateMessage(addTree2));
             ReadTextMessage();
 
             JObject addTree3 = Scene.Node.Add("tree3", new int[] { 3, 0, 9 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
-            WriteTextMessage(generateMessage(addTree3));
+            WriteTextMessage(GenerateMessage(addTree3));
             ReadTextMessage();
 
             JObject addTree4 = Scene.Node.Add("tree4", new int[] { 14, 0, 1 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
-            WriteTextMessage(generateMessage(addTree4));
+            WriteTextMessage(GenerateMessage(addTree4));
             ReadTextMessage();
 
             Console.WriteLine("Add car");
             JObject addCar = Scene.Node.Add("car", new int[] { 15, 0, 15 }, 0.01f, new int[] { 0, 90, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Party_Bike_v1_L1.123c4456ce2b-9560-4051-8040-9c1998def616/20391_Party_Bike_v1_NEW.obj", true, false, "no");
-            WriteTextMessage(generateMessage(addCar));
+            WriteTextMessage(GenerateMessage(addCar));
             response = ReadTextMessage();
             var carUuid = response["data"]["data"]["data"]["uuid"];
 
-            //add new route
+            //exercise 3f: add route
             Route.RouteNode[] routeNodes = new Route.RouteNode[4];
             routeNodes[0] = new Route.RouteNode(0, 0, 0, 5, 0, -5);
             routeNodes[1] = new Route.RouteNode(50, 0, 0, 5, 0, 5);
@@ -75,18 +79,19 @@ namespace SimpleTCPClient
             routeNodes[3] = new Route.RouteNode(0, 0, 50, -5, 0, -5);
 
             JObject addRoute = Route.Add(routeNodes);
-            WriteTextMessage(generateMessage(addRoute));
+            WriteTextMessage(GenerateMessage(addRoute));
             response = ReadTextMessage();
             var routeUuid = response["data"]["data"]["data"]["uuid"];
             Console.WriteLine(uuid);
 
-            //add a road over the route 
+            //exercise 3g: add road to route 
             JObject addRoad = Scene.Road.Add((string)routeUuid);
-            WriteTextMessage(generateMessage(addRoad));
+            WriteTextMessage(GenerateMessage(addRoad));
             ReadTextMessage();
 
+            //exercise 3h: object follows the route
             JObject followRoute = Route.Follow((string)routeUuid, (string)carUuid, 1.0, 0.0, Route.Rotation.XZ, 1.0, false, new int[] { 0, 0, 0 }, new int[] { 0, 0, 0 });
-            WriteTextMessage(generateMessage(followRoute));
+            WriteTextMessage(GenerateMessage(followRoute));
             ReadTextMessage();
 
 
@@ -109,8 +114,9 @@ namespace SimpleTCPClient
             response = ReadTextMessage(); // stap 4 (get response)
             var tunnelId = response["data"]["id"];
             TunnelId = (string)tunnelId;
+            Console.WriteLine("Init(): " + TunnelId);
 
-            WriteTextMessage(generateMessage(Scene.Reset()));
+            WriteTextMessage(GenerateMessage(Scene.Reset()));
             response = ReadTextMessage();
         }
 
@@ -168,15 +174,16 @@ namespace SimpleTCPClient
 
         public static string GenerateMessage(JObject message)
         {
-            /*JObject totalMessage =
+            JObject totalMessage =
                 new JObject(
                     new JProperty("id", "tunnel/send"),
                     new JProperty("data",
                     new JObject(
                         new JProperty("dest", TunnelId),
-                        new JProperty("data", new JObject(message)))));*/
+                        new JProperty("data", new JObject(message)))));
+            Console.WriteLine("GenerateMessage(): " + TunnelId);
 
-            JObject totalMessage = new JObject(new JProperty("id", "tunnel/send"), new JProperty("data", new JObject(new JProperty("dest", TunnelId), new JProperty("data", new JObject(message)))));
+            //JObject totalMessage = new JObject(new JProperty("id", "tunnel/send"), new JProperty("data", new JObject(new JProperty("dest", TunnelId), new JProperty("data", new JObject(message)))));
             return totalMessage.ToString();
         }
 
