@@ -70,27 +70,27 @@ namespace SimpleTCPClient
             ReadTextMessage();
 
             //exercise 3d: add 3D models
-            JObject addTree1 = Scene.Node.Add("tree1", new int[] { 25, 0, 10 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree1 = Scene.Node.Add("tree1", new int[] { 25, 0, 10 }, 1, new int[] { 0, 0, 0 }, "Resources/Tree.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree1));
             ReadTextMessage();
 
-            JObject addTree2 = Scene.Node.Add("tree2", new int[] { 7, 0, 12 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree2 = Scene.Node.Add("tree2", new int[] { 7, 0, 12 }, 1, new int[] { 0, 0, 0 }, "Resources/Tree.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree2));
             ReadTextMessage();
 
-            JObject addTree3 = Scene.Node.Add("tree3", new int[] { 3, 0, 9 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree3 = Scene.Node.Add("tree3", new int[] { 3, 0, 9 }, 1, new int[] { 0, 0, 0 }, "Resources/Tree.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree3));
             ReadTextMessage();
 
-            JObject addTree4 = Scene.Node.Add("tree4", new int[] { 14, 0, 1 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree4 = Scene.Node.Add("tree4", new int[] { 14, 0, 1 }, 1, new int[] { 0, 0, 0 }, "Resources/Tree.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree4));
             ReadTextMessage();
 
-            Console.WriteLine("Add car");
-            JObject addCar = Scene.Node.Add("car", new int[] { 15, 0, 15 }, 0.01f, new int[] { 0, 90, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Party_Bike_v1_L1.123c4456ce2b-9560-4051-8040-9c1998def616/20391_Party_Bike_v1_NEW.obj", true, false, "no");
-            WriteTextMessage(GenerateMessage(addCar));
-            response = ReadTextMessage();
-            var carUuid = response["data"]["data"]["data"]["uuid"];
+            //Console.WriteLine("Add car");
+            //JObject addCar = Scene.Node.Add("car", new int[] { 15, 0, 15 }, 0.01f, new int[] { 0, 90, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Party_Bike_v1_L1.123c4456ce2b-9560-4051-8040-9c1998def616/20391_Party_Bike_v1_NEW.obj", true, false, "no");
+            //WriteTextMessage(GenerateMessage(addCar));
+            //response = ReadTextMessage();
+            //var carUuid = response["data"]["data"]["data"]["uuid"];
 
             //exercise 3f: add route
             Route.RouteNode[] routeNodes = new Route.RouteNode[4];
@@ -111,9 +111,9 @@ namespace SimpleTCPClient
             ReadTextMessage();
 
             //exercise 3h: object follows the route
-            JObject followRoute = Route.Follow((string)routeUuid, (string)carUuid, 1.0, 0.0, Route.Rotation.XZ, 1.0, false, new int[] { 0, 0, 0 }, new int[] { 0, 0, 0 });
-            WriteTextMessage(GenerateMessage(followRoute));
-            ReadTextMessage();
+            //JObject followRoute = Route.Follow((string)routeUuid, (string)carUuid, 1.0, 0.0, Route.Rotation.XZ, 1.0, false, new int[] { 0, 0, 0 }, new int[] { 0, 0, 0 });
+            //WriteTextMessage(GenerateMessage(followRoute));
+            //ReadTextMessage();
 
 
         }
@@ -125,10 +125,11 @@ namespace SimpleTCPClient
             JObject response = ReadTextMessage(); // stap 2 (get response)
 
 
-            var properSession = response["data"].Where(e => e["clientinfo"]["user"].ToObject<string>() == "someb").Last();
+            //var properSession = response["data"].Where(e => e["clientinfo"]["user"].ToObject<string>() == "someb").Last();
 
-
+            var properSession = response["data"].Where(e => e["clientinfo"]["user"].ToObject<string>() == Environment.UserName).Last();
             var sessionId = properSession["id"];
+
             //Console.WriteLine(sessionId); // stap 3 (getting id)
 
             WriteTextMessage("{\"id\":\"tunnel/create\",\"data\":{\"session\":\"" + sessionId + "\"}}");

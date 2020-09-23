@@ -28,7 +28,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Resources\Chevrolet Camaro.blend">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Height_Map1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Tree.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
