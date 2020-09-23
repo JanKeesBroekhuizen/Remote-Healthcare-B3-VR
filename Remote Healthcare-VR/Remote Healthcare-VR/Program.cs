@@ -51,7 +51,7 @@ namespace SimpleTCPClient
             var uuid = response["data"]["data"]["data"][0]["uuid"];
 
             //exercise 3a and exercise 3e: add terrain (flat and with heights)
-            JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map2);
+            JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map1);
             WriteTextMessage(GenerateMessage(flatTerain));
             ReadTextMessage();
 
@@ -125,9 +125,10 @@ namespace SimpleTCPClient
             JObject response = ReadTextMessage(); // stap 2 (get response)
 
 
-           
+            var properSession = response["data"].Where(e => e["clientinfo"]["user"].ToObject<string>() == "someb").Last();
 
-            var sessionId = response["data"][0]["id"];
+
+            var sessionId = properSession["id"];
             //Console.WriteLine(sessionId); // stap 3 (getting id)
 
             WriteTextMessage("{\"id\":\"tunnel/create\",\"data\":{\"session\":\"" + sessionId + "\"}}");
