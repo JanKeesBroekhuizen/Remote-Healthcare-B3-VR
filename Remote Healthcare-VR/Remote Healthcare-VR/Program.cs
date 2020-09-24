@@ -10,6 +10,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SimpleTCPClient
 {
@@ -25,25 +27,10 @@ namespace SimpleTCPClient
 
         static void Main(string[] args)
         {
-         
+
             Client = new TcpClient("145.48.6.10", 6666);
             Init();
-            //SaveBaseObjects();
-
-            //Get groundplane id
-            //Example methods dictionary
-
-            VRObject object1 = new VRObject(VRObjects.NODE, "Object 1", 12345);
-            VRObject object2 = new VRObject(VRObjects.PANEL, "Object 2", 45678);
-            VRObject object3 = new VRObject(VRObjects.ROAD, "Object 3", 87654);
-            VRObject object4 = new VRObject(VRObjects.ROUTE, "Object 4", 98666);
-
-           
-
-            int tempcounter = VRObject.TotalDictionaryEntries();
-            Console.WriteLine(VRObject.LookupEntries(VRObjects.TERRAIN));
-
-            // End Example Dictionary
+            ReadMessageAsync();
 
             JObject find = Scene.Node.Find("GroundPlane");
             WriteTextMessage(GenerateMessage(find));
@@ -53,7 +40,7 @@ namespace SimpleTCPClient
             //exercise 3a and exercise 3e: add terrain (flat and with heights)
             JObject flatTerain = Scene.Terrain.Add(Remote_Healthcare_VR.Properties.Resources.Height_Map1);
             WriteTextMessage(GenerateMessage(flatTerain));
-            ReadTextMessage();
+            
 
             JObject grondRender = Scene.Node.Add("Grond", new int[] { -40, 0, -40 }, 1, new int[] { 0, 0, 0 }, true);
             WriteTextMessage(GenerateMessage(grondRender));
@@ -70,24 +57,24 @@ namespace SimpleTCPClient
             ReadTextMessage();
 
             //exercise 3d: add 3D models
-            JObject addTree1 = Scene.Node.Add("tree1", new int[] { 25, 0, 10 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree1 = Scene.Node.Add("tree1", new int[] { 25, 0, 10 }, 1, new int[] { 0, 0, 0 }, "Remote_Healthcare_VR.Properties.Resources.Tree1.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree1));
             ReadTextMessage();
 
-            JObject addTree2 = Scene.Node.Add("tree2", new int[] { 7, 0, 12 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree2 = Scene.Node.Add("tree2", new int[] { 7, 0, 12 }, 1, new int[] { 0, 0, 0 }, "Remote_Healthcare_VR.Properties.Resources.Tree1.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree2));
             ReadTextMessage();
 
-            JObject addTree3 = Scene.Node.Add("tree3", new int[] { 3, 0, 9 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree3 = Scene.Node.Add("tree3", new int[] { 3, 0, 9 }, 1, new int[] { 0, 0, 0 }, "Remote_Healthcare_VR.Properties.Resources.Tree1.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree3));
             ReadTextMessage();
 
-            JObject addTree4 = Scene.Node.Add("tree4", new int[] { 14, 0, 1 }, 1, new int[] { 0, 0, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Tree 02/Tree.obj", true, false, "no");
+            JObject addTree4 = Scene.Node.Add("tree4", new int[] { 14, 0, 1 }, 1, new int[] { 0, 0, 0 }, "Remote_Healthcare_VR.Properties.Resources.Tree1.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addTree4));
             ReadTextMessage();
 
             Console.WriteLine("Add car");
-            JObject addCar = Scene.Node.Add("car", new int[] { 15, 0, 15 }, 0.01f, new int[] { 0, 90, 0 }, "C:/Users/jkbro/Documents/Avans/TI2/Periode 1/Proftaak RH/Party_Bike_v1_L1.123c4456ce2b-9560-4051-8040-9c1998def616/20391_Party_Bike_v1_NEW.obj", true, false, "no");
+            JObject addCar = Scene.Node.Add("car", new int[] { 15, 0, 15 }, 0.01f, new int[] { 0, 90, 0 }, "Remote_Healthcare_VR.Properties.Resources.Tree1.obj", true, false, "no");
             WriteTextMessage(GenerateMessage(addCar));
             response = ReadTextMessage();
             var carUuid = response["data"]["data"]["data"]["uuid"];
@@ -118,17 +105,58 @@ namespace SimpleTCPClient
 
         }
 
+        public static async void ReadMessageAsync()
+        {
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(500);
+                    var stream = Client.GetStream();
+                    {
+                        Console.WriteLine("ReadTextMessage()");
+                        byte[] messageLength = new byte[4];
+                        int length = stream.Read(messageLength, 0, 4);
+                        messageLength.Reverse();
+                        int messageLenghtInt = BitConverter.ToInt32(messageLength);
+                        Console.WriteLine("Length: " + messageLenghtInt);
+
+                        byte[] message = new byte[messageLenghtInt];
+                        int totalRead = 0;
+
+                        do
+                        {
+                            int test = stream.Read(message, totalRead, messageLenghtInt - totalRead);
+                            totalRead += test;
+                        } while (totalRead < messageLenghtInt);
+
+                        JObject messageJson = JObject.Parse(Encoding.UTF8.GetString(message));
+                        Console.WriteLine(messageJson + "\n\n\n\n");
+
+                        return messageJson;
+                    }
+                }
+
+            });
+            
+        }
+
+
+
+
         static void Init()
         {
             WriteTextMessage("{\"id\":\"session/list\"}");
 
             JObject response = ReadTextMessage(); // stap 2 (get response)
 
-
-            var properSession = response["data"].Where(e => e["clientinfo"]["user"].ToObject<string>() == "someb").Last();
+            String CurrentUserName = Environment.UserName;
+            var properSession = response["data"].Where(e => e["clientinfo"]["user"].ToObject<string>() == CurrentUserName).Last();
 
 
             var sessionId = properSession["id"];
+
+
             //Console.WriteLine(sessionId); // stap 3 (getting id)
 
             WriteTextMessage("{\"id\":\"tunnel/create\",\"data\":{\"session\":\"" + sessionId + "\"}}");
@@ -167,11 +195,6 @@ namespace SimpleTCPClient
                 Console.WriteLine("ReadTextMessage()");
                 byte[] messageLength = new byte[4];
                 int length = stream.Read(messageLength, 0, 4);
-
-                //foreach (byte b in messageLength)
-                //{
-                //    Console.WriteLine(b + " ");
-                //}
                 messageLength.Reverse();
                 int messageLenghtInt = BitConverter.ToInt32(messageLength);
                 Console.WriteLine("Length: " + messageLenghtInt);
@@ -184,10 +207,6 @@ namespace SimpleTCPClient
                     int test = stream.Read(message, totalRead, messageLenghtInt - totalRead);
                     totalRead += test;
                 } while (totalRead < messageLenghtInt);
-
-                //Console.WriteLine("Length array: " + test);
-
-                //Console.WriteLine(Encoding.ASCII.GetString(message));
 
                 JObject messageJson = JObject.Parse(Encoding.UTF8.GetString(message));
                 Console.WriteLine(messageJson + "\n\n\n\n");

@@ -19,40 +19,45 @@ namespace Remote_Healthcare_VR
 
         public static JObject Get()
         {
-            JObject get = 
+            JObject get =
                 new JObject(
-                    new JProperty("id", "scene/get"));
+                    new JProperty("id", "scene/get"),
+            new JProperty("serial", "001"));
+
             return get;
         }
 
         public static JObject Reset()
         {
-            JObject reset = 
-            new JObject(
-            new JProperty("id", "scene/reset"));
+            JObject reset =
+                new JObject(
+                    new JProperty("id", "scene/reset"),
+            new JProperty("serial", "002"));
             return reset;
         }
 
         public static JObject Save(string fileName, bool overwrite)
         {
-            JObject save = 
+            JObject save =
                 new JObject(
-                    new JProperty("id", "scene/save"), 
-                    new JProperty("data", 
-                    new JObject(
-                        new JProperty("filename", fileName), 
-                        new JProperty("overwrite", overwrite))));
+                    new JProperty("id", "scene/save"),
+                    new JProperty("serial", "003"),
+            new JProperty("data",
+                new JObject(
+                    new JProperty("filename", fileName),
+                    new JProperty("overwrite", overwrite))));
             return save;
         }
 
         public static JObject Load(string fileName)
         {
-            JObject load = 
+            JObject load =
                 new JObject(
                     new JProperty("id", "scene/load"),
-                    new JProperty("data",
-                    new JObject(
-                        new JProperty("filename", fileName))));
+                    new JProperty("serial", "004"),
+            new JProperty("data",
+                new JObject(
+                    new JProperty("filename", fileName))));
             return load;
         }
 
@@ -61,17 +66,19 @@ namespace Remote_Healthcare_VR
             JObject raycast =
                 new JObject(
                     new JProperty("id", "scene/raycast"),
-                    new JProperty("data",
-                    new JObject(
-                        new JProperty("start", start), 
-                        new JProperty("direction", direction),
-                        new JProperty("physics", physics))));
+                    new JProperty("serial", "005"),
+            new JProperty("data",
+                new JObject(
+                    new JProperty("start", start),
+                    new JProperty("direction", direction),
+                    new JProperty("physics", physics))));
             return raycast;
         }
     }
+
     class Node
     {
-        public JObject Add(string name, string guid, 
+        public JObject Add(string name, string guid,
             int[] position, float scale, int[] rotation,
             string filename, bool cullbackfaces, bool animated, string animationname,
             bool smoothnormals, int[] panelSize, int[] panelResolution, int[] background, bool castshadow,
@@ -80,33 +87,34 @@ namespace Remote_Healthcare_VR
             JObject add =
                 new JObject(
                     new JProperty("id", "scene/node/add"),
-                    new JProperty("data",
+                    new JProperty("serial", "006"),
+            new JProperty("data",
+                new JObject(
+                new JProperty("name", name),
+                new JProperty("parent", guid),
+                new JProperty("components",
                     new JObject(
-                        new JProperty("name", name),
-                        new JProperty("parent", guid),
-                        new JProperty("components",
-                        new JObject(
-                            new JProperty("transform", 
+                        new JProperty("transform",
                             new JObject(
                                 new JProperty("position", position),
                                 new JProperty("scale", scale),
                                 new JProperty("rotation", rotation))),
-                            new JProperty("model",
+                        new JProperty("model",
                             new JObject(
                                 new JProperty("file", filename),
                                 new JProperty("cullbackfaces", cullbackfaces),
                                 new JProperty("animated", animated),
                                 new JProperty("animation", animationname))),
-                            new JProperty("terrain",
+                        new JProperty("terrain",
                             new JObject(
                                 new JProperty("smoothnormals", smoothnormals))),
-                            new JProperty("panel",
+                        new JProperty("panel",
                             new JObject(
                                 new JProperty("size", panelSize),
                                 new JProperty("resolution", panelResolution),
                                 new JProperty("background", background),
                                 new JProperty("castShadow", castshadow))),
-                            new JProperty("water",
+                        new JProperty("water",
                             new JObject(
                                 new JProperty("size", waterSize),
                                 new JProperty("resolulion", waterResolution))))))));
@@ -115,29 +123,29 @@ namespace Remote_Healthcare_VR
 
         public JObject Add(string name,
             int[] position, float scale, int[] rotation,
-             string filename, bool cullbackfaces, bool animated, string animationname)
+            string filename, bool cullbackfaces, bool animated, string animationname)
         {
             JObject add =
-    new JObject(
-        new JProperty("id", "scene/node/add"),
-        new JProperty("data",
-        new JObject(
-            new JProperty("name", name),
-            new JProperty("components",
-            new JObject(
-                new JProperty("transform",
                 new JObject(
-                    new JProperty("position", position),
-                    new JProperty("scale", scale),
-                    new JProperty("rotation", rotation))),
-                new JProperty("model",
+                    new JProperty("id", "scene/node/add"),
+                    new JProperty("serial", "007"),
+            new JProperty("data",
                 new JObject(
-                    new JProperty("file", filename),
-                    new JProperty("cullbackfaces", cullbackfaces),
-                    new JProperty("animated", animated),
-                    new JProperty("animation", animationname))))))));
+                new JProperty("name", name),
+                new JProperty("components",
+                    new JObject(
+                        new JProperty("transform",
+                            new JObject(
+                                new JProperty("position", position),
+                                new JProperty("scale", scale),
+                                new JProperty("rotation", rotation))),
+                        new JProperty("model",
+                            new JObject(
+                                new JProperty("file", filename),
+                                new JProperty("cullbackfaces", cullbackfaces),
+                                new JProperty("animated", animated),
+                                new JProperty("animation", animationname))))))));
             return add;
-
         }
 
         public JObject Add(string name, bool smoothnormals)
@@ -145,12 +153,13 @@ namespace Remote_Healthcare_VR
             JObject add =
                 new JObject(
                     new JProperty("id", "scene/node/add"),
-                    new JProperty("data",
+                    new JProperty("serial", "008"),
+            new JProperty("data",
+                new JObject(
+                new JProperty("name", name),
+                new JProperty("components",
                     new JObject(
-                        new JProperty("name", name),
-                        new JProperty("components",
-                        new JObject(
-                            new JProperty("terrain",
+                        new JProperty("terrain",
                             new JObject(
                                 new JProperty("smoothnormals", smoothnormals))))))));
             return add;
@@ -161,17 +170,18 @@ namespace Remote_Healthcare_VR
             JObject add =
                 new JObject(
                     new JProperty("id", "scene/node/add"),
+                    new JProperty("serial", "009"),
                     new JProperty("data",
+                new JObject(
+                new JProperty("name", name),
+                new JProperty("components",
                     new JObject(
-                        new JProperty("name", name),
-                        new JProperty("components",
-                        new JObject(
-                            new JProperty("transform",
+                        new JProperty("transform",
                             new JObject(
                                 new JProperty("position", position),
                                 new JProperty("scale", scale),
                                 new JProperty("rotation", rotation))),
-                            new JProperty("terrain",
+                        new JProperty("terrain",
                             new JObject(
                                 new JProperty("smoothnormals", smoothnormals))))))));
             return add;
@@ -182,12 +192,13 @@ namespace Remote_Healthcare_VR
             JObject add =
                 new JObject(
                     new JProperty("id", "scene/node/add"),
+                    new JProperty("serial", "010"),
                     new JProperty("data",
+                new JObject(
+                new JProperty("name", name),
+                new JProperty("components",
                     new JObject(
-                        new JProperty("name", name),
-                        new JProperty("components",
-                        new JObject(
-                            new JProperty("water",
+                        new JProperty("water",
                             new JObject(
                                 new JProperty("size", waterSize),
                                 new JProperty("resolulion", waterResolution))))))));
@@ -199,12 +210,13 @@ namespace Remote_Healthcare_VR
             JObject add =
                 new JObject(
                     new JProperty("id", "scene/node/add"),
+                    new JProperty("serial", "011"),
                     new JProperty("data",
+                new JObject(
+                new JProperty("name", name),
+                new JProperty("components",
                     new JObject(
-                        new JProperty("name", name),
-                        new JProperty("components",
-                        new JObject(
-                            new JProperty("panel",
+                        new JProperty("panel",
                             new JObject(
                                 new JProperty("size", panelSize),
                                 new JProperty("resolution", panelResolution),
@@ -213,24 +225,26 @@ namespace Remote_Healthcare_VR
             return add;
         }
 
-        public JObject Update(string id, string parent, int[] position, float scale, int[] rotation, string name, float speed)
+        public JObject Update(string id, string parent, int[] position, float scale, int[] rotation, string name,
+            float speed)
         {
             JObject update =
                 new JObject(
                     new JProperty("id", "scene/node/update"),
+                    new JProperty("serial", "012"),
                     new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id),
-                        new JProperty("parent", parent),
-                        new JProperty("transform",
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("parent", parent),
+                    new JProperty("transform",
                         new JObject(
                             new JProperty("posotion", position),
                             new JProperty("scale", scale),
                             new JProperty("rotation", rotation)),
-                        new JProperty("animation", 
-                        new JObject(
-                            new JProperty("name", name),
-                            new JProperty("speed", speed)))))));
+                        new JProperty("animation",
+                            new JObject(
+                                new JProperty("name", name),
+                                new JProperty("speed", speed)))))));
             return update;
         }
 
@@ -239,30 +253,33 @@ namespace Remote_Healthcare_VR
             JObject moveto =
                 new JObject(
                     new JProperty("id", "scene/node/moveto"),
+                    new JProperty("serial", "013"),
                     new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id),
-                        new JProperty("position", position),
-                        new JProperty("rotate", rotate),
-                        new JProperty("interpolate", interpolate),
-                        new JProperty("followheight", followheight),
-                        new JProperty("time", time))));
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("position", position),
+                    new JProperty("rotate", rotate),
+                    new JProperty("interpolate", interpolate),
+                    new JProperty("followheight", followheight),
+                    new JProperty("time", time))));
             return moveto;
         }
 
-        public JObject MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight, float speed)
+        public JObject MoveTo(string id, int[] position, string rotate, string interpolate, bool followheight,
+            float speed)
         {
             JObject moveto =
                 new JObject(
                     new JProperty("id", "scene/node/moveto"),
+                    new JProperty("serial", "014"),
                     new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id),
-                        new JProperty("position", position),
-                        new JProperty("rotate", rotate),
-                        new JProperty("interpolate", interpolate),
-                        new JProperty("followheight", followheight),
-                        new JProperty("speed", speed))));
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("position", position),
+                    new JProperty("rotate", rotate),
+                    new JProperty("interpolate", interpolate),
+                    new JProperty("followheight", followheight),
+                    new JProperty("speed", speed))));
             return moveto;
         }
 
@@ -271,10 +288,11 @@ namespace Remote_Healthcare_VR
             JObject moveto =
                 new JObject(
                     new JProperty("id", "scene/node/moveto"),
+                    new JProperty("serial", "015"),
                     new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id),
-                        new JProperty("stop", stop))));
+                new JObject(
+                    new JProperty("id", id),
+                    new JProperty("stop", stop))));
             return moveto;
         }
 
@@ -283,9 +301,10 @@ namespace Remote_Healthcare_VR
             JObject delete =
                 new JObject(
                     new JProperty("id", "scene/node/delete"),
+                    new JProperty("serial", "016"),
                     new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id))));
+                new JObject(
+                    new JProperty("id", id))));
             return delete;
         }
 
@@ -294,9 +313,10 @@ namespace Remote_Healthcare_VR
             JObject find =
                 new JObject(
                     new JProperty("id", "scene/node/find"),
-                    new JProperty("data",
-                    new JObject(
-                        new JProperty("name", name))));
+                    new JProperty("serial", "017"),
+            new JProperty("data",
+                        new JObject(
+                            new JProperty("name", name))));
             return find;
         }
 
@@ -305,14 +325,15 @@ namespace Remote_Healthcare_VR
             JObject addLayer =
                 new JObject(
                     new JProperty("id", "scene/node/addlayer"),
-                    new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id),
-                        new JProperty("diffuse", diffuse),
-                        new JProperty("normal", normal),
-                        new JProperty("minHeight", minHeight),
-                        new JProperty("maxHeight", maxHeight),
-                        new JProperty("fadeDist", fadeDist))));
+                    new JProperty("serial", "018"),
+            new JProperty("data",
+                        new JObject(
+                            new JProperty("id", id),
+                            new JProperty("diffuse", diffuse),
+                            new JProperty("normal", normal),
+                            new JProperty("minHeight", minHeight),
+                            new JProperty("maxHeight", maxHeight),
+                            new JProperty("fadeDist", fadeDist))));
             return addLayer;
         }
 
@@ -321,30 +342,32 @@ namespace Remote_Healthcare_VR
             JObject delLayer =
                 new JObject(
                     new JProperty("id", "scene/node/dellayer"),
-                    new JProperty("data",
-                    new JObject()));
+                    new JProperty("serial", "019"),
+            new JProperty("data",
+                        new JObject()));
             return delLayer;
         }
-    } 
+    }
 
     class Terrain
     {
         public JObject Add(float[] size, float[] heights)
         {
-            JObject add = 
+            JObject add =
                 new JObject(
-                    new JProperty("id", "scene/terrain/add"), 
-                    new JProperty("data", 
-                    new JObject(
-                        new JProperty("size", size), 
-                        new JProperty("heights", heights))));
+                    new JProperty("id", "scene/terrain/add"),
+                    new JProperty("serial", "020"),
+                    new JProperty("data",
+                        new JObject(
+                            new JProperty("size", size),
+                            new JProperty("heights", heights))));
             return add;
         }
 
         public JObject Add(Image image)
         {
             Bitmap bitMap = new Bitmap(image);
-            float[] size = new float[] { bitMap.Width, bitMap.Height };
+            float[] size = new float[] {bitMap.Width, bitMap.Height};
 
             float[] heights = new float[bitMap.Width * bitMap.Height];
             for (int x = 0; x < bitMap.Width; x++)
@@ -359,74 +382,79 @@ namespace Remote_Healthcare_VR
             JObject add =
                 new JObject(
                     new JProperty("id", "scene/terrain/add"),
+                    new JProperty("serial", "021"),
                     new JProperty("data",
-                    new JObject(
-                        new JProperty("size", size),
-                        new JProperty("heights", heights))));
+                        new JObject(
+                            new JProperty("size", size),
+                            new JProperty("heights", heights))));
             return add;
         }
 
         public JObject Update()
         {
-            JObject update = 
+            JObject update =
                 new JObject(
-                    new JProperty("id", "scene/terrain/update"), 
+                    new JProperty("id", "scene/terrain/update"),
+                    new JProperty("serial", "022"),
                     new JProperty("data"));
             return update;
         }
 
-        public JObject Delete() 
+        public JObject Delete()
         {
-            JObject delete = 
+            JObject delete =
                 new JObject(
-                    new JProperty("id", "scene/terrain/delete"), 
+                    new JProperty("id", "scene/terrain/delete"),
+                    new JProperty("serial", "023"),
                     new JProperty("data"));
             return delete;
         }
 
         public JObject GetHeight(float[] position, float[] positions) //Volgens mij is dit niet correct!
         {
-            JObject getheight = 
+            JObject getheight =
                 new JObject(
-                    new JProperty("id", "scene/terrain/getheight"), 
-                    new JProperty("data", 
-                    new JObject(
-                        new JProperty("position", position), 
-                        new JProperty("positions", positions))));
+                    new JProperty("id", "scene/terrain/getheight"),
+                    new JProperty("serial", "024"),
+                    new JProperty("data",
+                        new JObject(
+                            new JProperty("position", position),
+                            new JProperty("positions", positions))));
             return getheight;
         }
-
     }
 
     class Panel
     {
         public JObject Clear(string id)
         {
-            JObject clear = 
+            JObject clear =
                 new JObject(
-                new JProperty("id", "scene/panel/clear"),
-                new JProperty("data", 
-                    new JObject(
-                        new JProperty("id", id)
+                    new JProperty("id", "scene/panel/clear"),
+                    new JProperty("serial", "025"),
+                    new JProperty("data",
+                        new JObject(
+                            new JProperty("id", id)
+                        )
                     )
-                )
-            );
+                );
             return clear;
         }
 
         public JObject DrawLines(string id, int width, List<int[]> lines)
         {
-            JObject drawLines = 
+            JObject drawLines =
                 new JObject(
-                new JProperty("id", "scene/panel/drawlines"),
-                new JProperty("data",
-                    new JObject(
-                        new JProperty("id", id),
-                        new JProperty("width", width),
-                        new JProperty("lines", from l in lines select new JArray(l))
+                    new JProperty("id", "scene/panel/drawlines"),
+                    new JProperty("serial", "026"),
+                    new JProperty("data",
+                        new JObject(
+                            new JProperty("id", id),
+                            new JProperty("width", width),
+                            new JProperty("lines", from l in lines select new JArray(l))
+                        )
                     )
-                )
-            );
+                );
             return drawLines;
         }
 
@@ -434,6 +462,7 @@ namespace Remote_Healthcare_VR
         {
             JObject drawText = new JObject(
                 new JProperty("id", "scene/panel/drawtext"),
+                new JProperty("serial", "027"),
                 new JProperty("data",
                     new JObject(
                         new JProperty("id", id),
@@ -452,6 +481,7 @@ namespace Remote_Healthcare_VR
         {
             JObject image = new JObject(
                 new JProperty("id", "scene/panel/image"),
+                new JProperty("serial", "028"),
                 new JProperty("data",
                     new JObject(
                         new JProperty("id", id),
@@ -468,6 +498,7 @@ namespace Remote_Healthcare_VR
         {
             JObject setClearColor = new JObject(
                 new JProperty("id", "scene/panel/setclearcolor"),
+                new JProperty("serial", "029"),
                 new JProperty("data",
                     new JObject(
                         new JProperty("id", id),
@@ -482,9 +513,10 @@ namespace Remote_Healthcare_VR
         {
             JObject swap = new JObject(
                 new JProperty("id", "scene/panel/swap"),
+                new JProperty("serial", "030"),
                 new JProperty("data",
-                new JObject(
-                    new JProperty("id", id))));
+                    new JObject(
+                        new JProperty("id", id))));
             return swap;
         }
     }
@@ -494,10 +526,11 @@ namespace Remote_Healthcare_VR
         public JObject SetTime(float time)
         {
             JObject settime = new JObject(
-                new JProperty("id", "scene/skybox/settime"), 
-                new JProperty("data", 
-                new JObject(
-                    new JProperty("time", time))));
+                new JProperty("id", "scene/skybox/settime"),
+                new JProperty("serial", "031"),
+                new JProperty("data",
+                    new JObject(
+                        new JProperty("time", time))));
             return settime;
         }
 
@@ -505,37 +538,43 @@ namespace Remote_Healthcare_VR
         {
             JObject update = new JObject(
                 new JProperty("id", "scene/terrain/update"),
-                new JProperty("data", 
-                new JObject(
-                    new JProperty("type", "static"),
-                    new JProperty("files", 
+                new JProperty("serial", "032"),
+                new JProperty("data",
                     new JObject(
-                        new JProperty("xpos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_rt.png"),
-                        new JProperty("xneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_lf.png"),
-                        new JProperty("ypos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_up.png"),
-                        new JProperty("yneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_dn.png"),
-                        new JProperty("zpos", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_bk.png"),
-                        new JProperty("zneg", "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_ft.png"))))));
+                        new JProperty("type", "static"),
+                        new JProperty("files",
+                            new JObject(
+                                new JProperty("xpos",
+                                    "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_rt.png"),
+                                new JProperty("xneg",
+                                    "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_lf.png"),
+                                new JProperty("ypos",
+                                    "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_up.png"),
+                                new JProperty("yneg",
+                                    "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_dn.png"),
+                                new JProperty("zpos",
+                                    "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_bk.png"),
+                                new JProperty("zneg",
+                                    "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_ft.png"))))));
             return update;
         }
-
     }
 
     class Road
     {
-
         //scene/road/add
         public JObject Add(string routeUuid)
         {
             JObject AddRoad = new JObject(
-                new JProperty("id", "scene/road/add"), 
-                new JProperty("data", 
-                new JObject(new JProperty("route", routeUuid), 
-                    new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
-                    new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
-                    new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
-                    new JProperty("heightoffset", 0.01)
-              )));
+                new JProperty("id", "scene/road/add"),
+                new JProperty("serial", "033"),
+                new JProperty("data",
+                    new JObject(new JProperty("route", routeUuid),
+                        new JProperty("diffuse", "data/NetworkEngine/textures/tarmac_diffuse.png"),
+                        new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
+                        new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
+                        new JProperty("heightoffset", 0.01)
+                    )));
             return AddRoad;
         }
 
@@ -544,7 +583,8 @@ namespace Remote_Healthcare_VR
         {
             JObject updateRoad = new JObject(
                 new JProperty("id", "scene/road/update"),
-                new JProperty("data",
+                new JProperty("serial", "034"),
+            new JProperty("data",
                 new JObject(
                     new JProperty("id", roadUuid),
                     new JProperty("route", routeUuid),
@@ -552,9 +592,8 @@ namespace Remote_Healthcare_VR
                     new JProperty("normal", "data/NetworkEngine/textures/tarmac_normale.png"),
                     new JProperty("specular", "data/NetworkEngine/textures/tarmac_specular.png"),
                     new JProperty("heightoffset", 0.01)
-              )));
+                )));
             return updateRoad;
         }
     }
 }
-
